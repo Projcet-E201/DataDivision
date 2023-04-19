@@ -20,4 +20,8 @@ spring:
       max-file-size: 5MB
       max-request-size: 5MB
 
-
+  kafka:
+    consumer:
+      bootstrap-servers: localhost:9092
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
