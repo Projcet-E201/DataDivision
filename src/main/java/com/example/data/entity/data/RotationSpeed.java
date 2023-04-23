@@ -6,7 +6,7 @@ import lombok.*;
 import javax.persistence.*;
 
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(force = true)
 @AllArgsConstructor
 @ToString
 @Builder
@@ -21,6 +21,6 @@ public class RotationSpeed {
     private SensorInfo sensorInfo;
 
     @NotNull
-    private Double value = 0.0;
+    private Double value;
 
 }
