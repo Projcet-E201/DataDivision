@@ -5,9 +5,6 @@ spring:
   influxdb:
 #    url: http://localhost:8086
     url: http://k8e2011.p.ssafy.io:8086
-    username: semse
-    password: semse201!
-    token: EBOQzZOcOV8XTh3z_B7ZW1k8hLw54-VN10YlhrCbnejZFPuUuFGvllz1RDRt6zdHaL-J7EYae5RoHonvyBQpPg==
 #    retention-policy: autogen # 데이터를 얼마나 오래 보관할지
 #    consistency: ONE # 데이터를 쓰거나 읽을 때 몇개의 노드에서 확인할지
 #    enable-gzip: true # 데이터 전송을 압축할 것인지
