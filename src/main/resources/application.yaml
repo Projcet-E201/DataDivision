@@ -2,6 +2,16 @@ spring:
   profiles:
     active: local, secret
 
+  influxdb:
+#    url: http://localhost:8086
+    url: http://k8e2011.p.ssafy.io:8086
+#    retention-policy: autogen # 데이터를 얼마나 오래 보관할지
+#    consistency: ONE # 데이터를 쓰거나 읽을 때 몇개의 노드에서 확인할지
+#    enable-gzip: true # 데이터 전송을 압축할 것인지
+#    enable-batching: true # 데이터 전송을 일괄 처리할 것인지
+#    batch-size: 1000 # 한번에 처리할 개수
+#    flush-duration: 1000ms # 일괄 처리할 시간 간격
+
   jpa:
     properties:
       hibernate:
@@ -21,7 +31,7 @@ spring:
       max-request-size: 5MB
 
   kafka:
-    bootstrap-servers: plaintext://3.17.63.229:9092
+    bootstrap-servers: plaintext://13.124.124.92:9092
     consumer:
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
