@@ -9,10 +9,9 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Component;
 
-import com.example.data.netty.global.handler.AbstractNettyInboundHandler;
+import com.example.data.netty.global.handler.AbstractHandler;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.util.CharsetUtil;
 import lombok.RequiredArgsConstructor;
@@ -20,17 +19,15 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
-@ChannelHandler.Sharable
 @RequiredArgsConstructor
-public class ImageNettyInboundHandler extends AbstractNettyInboundHandler {
+public class ImageHandler extends AbstractHandler {
 
 	private static final String IMAGE_SAVE_PATH = "received_images";
 
 	// 데이터를 읽어들임.
-	@Override
-	protected void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
-		Map<String, String> receiveData = parseData(msg.toString(CharsetUtil.UTF_8));
-		log.info("Receive Image: {} {} {} {}" , receiveData.get("dataServer"), receiveData.get("dataType"), receiveData.get("dataTime"), receiveData.get("dataIdentifier"));
+	protected void channelRead0(String msg) throws Exception {
+		Map<String, String> receiveData = parseData(msg);
+		log.info("Parse Image: {} {} {} {}" , receiveData.get("dataServer"), receiveData.get("dataType"), receiveData.get("dataTime"), receiveData.get("dataIdentifier"));
 
 		// 데이터를 나눠서 보내는 경우, 모아두는 코드
 		dataMap.putIfAbsent(receiveData.get("dataIdentifier"), new StringBuilder());

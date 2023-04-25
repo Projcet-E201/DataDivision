@@ -2,19 +2,13 @@ package com.example.data.netty.data;
 
 import java.time.Instant;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 
-import com.example.data.netty.global.handler.AbstractNettyInboundHandler;
-import com.influxdb.annotations.Column;
-import com.influxdb.annotations.Measurement;
+import com.example.data.netty.global.handler.AbstractHandler;
 import com.influxdb.client.InfluxDBClient;
-import com.influxdb.client.InfluxDBClientFactory;
-import com.influxdb.client.WriteApi;
 import com.influxdb.client.WriteApiBlocking;
 import com.influxdb.client.domain.WritePrecision;
 import com.influxdb.client.write.Point;
-import com.influxdb.query.FluxTable;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
@@ -25,17 +19,15 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-@ChannelHandler.Sharable
 @RequiredArgsConstructor
-public class DataNettyInboundHandler extends AbstractNettyInboundHandler {
+public class DataHandler extends AbstractHandler {
 
 	private final InfluxDBClient influxDBClient;
 
 	// 데이터를 읽어들임.
-	@Override
 	protected void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) {
 		Map<String, String> receiveData = parseData(msg.toString(CharsetUtil.UTF_8));
-		log.info("Receive Data: {} {} {} {}", receiveData.get("dataServer"), receiveData.get("dataType"), receiveData.get("dataValue"), receiveData.get("dataTime"));
+		log.info("Parse Data: {} {} {} {}", receiveData.get("dataServer"), receiveData.get("dataType"), receiveData.get("dataValue"), receiveData.get("dataTime"));
 		addTSData(receiveData.get("dataServer"), receiveData.get("dataType"), receiveData.get("dataValue"), receiveData.get("dataTime"));
 	}
 

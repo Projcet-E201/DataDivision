@@ -8,12 +8,10 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Base64;
 import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.stereotype.Component;
 
-import com.example.data.netty.global.handler.AbstractNettyInboundHandler;
+import com.example.data.netty.global.handler.AbstractHandler;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandler;
@@ -27,16 +25,15 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ChannelHandler.Sharable
 @RequiredArgsConstructor
-public class AnalogNettyInboundHandler extends AbstractNettyInboundHandler {
+public class AnalogHandler extends AbstractHandler {
 
 	private static final String SAVE_PATH = "received_analog";
 	private static final String ZIP_EXTENSION = ".zip";
 
 	// 데이터를 읽어들임.
-	@Override
-	protected void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws IOException {
-		Map<String, String> receiveData = parseData(msg.toString(CharsetUtil.UTF_8));
-		log.info("Receive Analog: {} {} {}" , receiveData.get("dataServer"), receiveData.get("dataType"), receiveData.get("dataTime"));
+	protected void channelRead0(String msg) throws IOException {
+		Map<String, String> receiveData = parseData(msg);
+		log.info("Parse Analog: {} {} {}" , receiveData.get("dataServer"), receiveData.get("dataType"), receiveData.get("dataTime"));
 
 		dataMap.putIfAbsent(receiveData.get("dataIdentifier"), new StringBuilder());
 		StringBuilder dataBuilder = dataMap.get(receiveData.get("dataIdentifier"));

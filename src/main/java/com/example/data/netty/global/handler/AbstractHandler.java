@@ -8,33 +8,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public abstract class AbstractNettyInboundHandler  extends SimpleChannelInboundHandler<ByteBuf> {
+public abstract class AbstractHandler {
 
 	protected Map<String, StringBuilder> dataMap = new ConcurrentHashMap<>();
-
-	@Override
-	public void channelActive(ChannelHandlerContext ctx) {
-		log.info("Channel active: {}", ctx.channel());
-	}
-
-	// 클라이언트와 연결되어 트래픽을 생성할 준비가 되었을 때 호출하는 메서드
-	@Override
-	public void channelInactive(ChannelHandlerContext ctx) {
-		log.info("Channel inactive: {}", ctx.channel());
-	}
-
-	// 예외 발생시
-	@Override
-	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-		cause.printStackTrace();
-		ctx.close();
-	}
 
 	protected Map<String, String> parseData(String receivedData) {
 		String[] dataParts = receivedData.split(" ");
