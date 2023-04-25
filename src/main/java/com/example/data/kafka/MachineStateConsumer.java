@@ -5,11 +5,12 @@ import com.example.data.netty.data.MachineStateHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
 @Slf4j
-@RequiredArgsConstructor
+@Component
 public class MachineStateConsumer {
 
     @KafkaListener(topics="MACHINE_STATE", groupId = "MACHINE_STATE-CONSUMER-GROUP")

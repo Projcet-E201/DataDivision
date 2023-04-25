@@ -2,14 +2,13 @@ server:
   port: 8090
 
 netty:
-
-
-
-
-
-
-
-
+  data-port: 9997
+  analog-port: 9998
+  image-port: 9999
+  boss-count: 5
+  worker-count: 5
+  keep-alive: true
+  backlog: 100
 
 spring:
   datasource:

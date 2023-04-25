@@ -4,9 +4,10 @@ import com.example.data.netty.image.ImageHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.stereotype.Component;
 
 @Slf4j
-@RequiredArgsConstructor
+@Component
 public class ImageConsumer extends ImageHandler {
 
     @KafkaListener(topics="IMAGE", groupId = "IMAGE-CONSUMER-GROUP")

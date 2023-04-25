@@ -10,6 +10,12 @@ import com.example.data.netty.image.ImageNettyServerSocket;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * Netty TCP 소켓통신 연결 설정을 위한 클래스입니다.
+ * (kafka를 사용하지 않을 때 주석을 풀어주세요)
+ * */
+
+
 @Component
 @RequiredArgsConstructor
 public class ApplicationStartupTask implements ApplicationListener<ApplicationReadyEvent> {
