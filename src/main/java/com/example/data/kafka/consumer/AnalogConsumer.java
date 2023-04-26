@@ -1,7 +1,6 @@
-package com.example.data.kafka;
+package com.example.data.kafka.consumer;
 
-import com.example.data.netty.analog.AnalogHandler;
-import lombok.RequiredArgsConstructor;
+import com.example.data.kafka.data.AnalogHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
@@ -12,10 +11,9 @@ import java.io.IOException;
 @Component
 public class AnalogConsumer extends AnalogHandler {
 
-    @KafkaListener(topics="ANALOG", groupId = "ANALOG-CONSUMER-GROUP")
+    @KafkaListener(topics="ANALOG", groupId = "ANALOG-CONSUMER-GROUP", concurrency = "3")
     public void consumeAnalog(String message) throws IOException {
         log.info("Receive Analog: {}" , message);
         channelRead0(message);
     }
-
 }

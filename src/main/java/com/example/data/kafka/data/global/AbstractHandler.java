@@ -1,4 +1,4 @@
-package com.example.data.netty.global.handler;
+package com.example.data.kafka.data.global;
 
 import java.io.File;
 import java.io.FileOutputStream;

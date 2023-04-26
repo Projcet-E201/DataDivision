@@ -1,4 +1,4 @@
-package com.example.data.netty.analog;
+package com.example.data.kafka.data;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -11,12 +11,9 @@ import java.util.Map;
 
 import org.springframework.stereotype.Component;
 
-import com.example.data.netty.global.handler.AbstractHandler;
+import com.example.data.kafka.data.global.AbstractHandler;
 
-import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandler;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.util.CharsetUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -33,15 +30,10 @@ public class AnalogHandler extends AbstractHandler {
 	// 데이터를 읽어들임.
 	protected void channelRead0(String msg) throws IOException {
 		Map<String, String> receiveData = parseData(msg);
-		log.info("Parse Analog: {} {} {}" , receiveData.get("dataServer"), receiveData.get("dataType"), receiveData.get("dataTime"));
-
-		dataMap.putIfAbsent(receiveData.get("dataIdentifier"), new StringBuilder());
-		StringBuilder dataBuilder = dataMap.get(receiveData.get("dataIdentifier"));
-		dataBuilder.append(receiveData.get("dataValue"));
+		log.info("Parse Analog: {} {} {} {}" , receiveData.get("dataServer"), receiveData.get("dataType"), receiveData.get("dataValue"), receiveData.get("dataTime"));
 
 		if (receiveData.get("dataValue").endsWith("|")) {
-			String fullData = dataBuilder.toString().trim().replace("|", "");
-			dataMap.remove(receiveData.get("dataIdentifier"));
+			String fullData = receiveData.get("dataValue").trim().replace("|", "");
 
 			byte[] decodedData = Base64.getDecoder().decode(fullData);
 

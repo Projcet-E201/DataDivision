@@ -1,7 +1,6 @@
-package com.example.data.kafka;
+package com.example.data.kafka.consumer;
 
-import com.example.data.netty.image.ImageHandler;
-import lombok.RequiredArgsConstructor;
+import com.example.data.kafka.data.ImageHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;

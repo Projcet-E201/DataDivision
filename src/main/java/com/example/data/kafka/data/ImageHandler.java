@@ -1,4 +1,4 @@
-package com.example.data.netty.image;
+package com.example.data.kafka.data;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -9,11 +9,8 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Component;
 
-import com.example.data.netty.global.handler.AbstractHandler;
+import com.example.data.kafka.data.global.AbstractHandler;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.util.CharsetUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
