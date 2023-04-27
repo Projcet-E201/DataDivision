@@ -35,22 +35,25 @@ public class DataNettyInboundHandler extends AbstractNettyInboundHandler {
 	@Override
 	protected void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) {
 		Map<String, String> receiveData = parseData(msg.toString(CharsetUtil.UTF_8));
-		log.info("Receive Data: {} {} {} {}", receiveData.get("dataServer"), receiveData.get("dataType"), receiveData.get("dataValue"), receiveData.get("dataTime"));
+//		log.info("Receive Data: {} {} {} {}", receiveData.get("dataServer"), receiveData.get("dataType"), receiveData.get("dataValue"), receiveData.get("dataTime"));
+		log.info("Receive Data: {}", receiveData.get("dataTime"));
 		addTSData(receiveData.get("dataServer"), receiveData.get("dataType"), receiveData.get("dataValue"), receiveData.get("dataTime"));
 	}
 
 	private void addTSData(String server, String type, String value, String time) {
 		if (!type.startsWith("MACHINE_STATE")) {
 			try {
+				String bigName = typeTobigType(type);
 				long fieldValue = Long.parseLong(value);
 				Point row = Point
 						.measurement(server)
+						.addTag("big_name", bigName)
 						.addTag("name", type)
 						.addTag("generate_time", time)
 						.addField("value", fieldValue)
 						.time(Instant.now(), WritePrecision.NS);
 				WriteApiBlocking writeApi = influxDBClient.getWriteApiBlocking();
-				writeApi.writePoint("threeday", "semse",row);
+				writeApi.writePoint("three day", "semse",row);
 //				log.info("fieldValue = {}",fieldValue);
 			} catch (NumberFormatException e) {
 				log.error("Failed to parse value {} as a Long. Exception message: {}", value, e.getMessage());
@@ -64,11 +67,13 @@ public class DataNettyInboundHandler extends AbstractNettyInboundHandler {
 			String[] value_lst = value.split(",");
 			for (int i = 0; i < value_lst.length; i++) {
 				String[] result = value_lst[i].split(":");
+				String bigName = typeTobigType(result[0]);
 				log.info(Arrays.toString(result));
 				if (result[0].startsWith("string")) {
 					try {
 						Point row = Point
 								.measurement(server)
+								.addTag("big_name", bigName)
 								.addTag("name", result[0])
 								.addTag("generate_time", time)
 								.addField("value_str", result[1])
@@ -88,6 +93,7 @@ public class DataNettyInboundHandler extends AbstractNettyInboundHandler {
 						Double fieldValue = Double.parseDouble(result[1]);
 						Point row = Point
 								.measurement(server)
+								.addTag("big_name", bigName)
 								.addTag("name", result[0])
 								.addTag("generate_time", time)
 								.addField("value_double", fieldValue)
@@ -106,9 +112,11 @@ public class DataNettyInboundHandler extends AbstractNettyInboundHandler {
 					}
 				} else {
 					try {
-						Long fieldValue = Long.parseLong(result[1]);
+						int fieldValue = Integer.parseInt(result[1]);
+						System.out.println("fieldValue = " + fieldValue);
 						Point row = Point
 								.measurement(server)
+								.addTag("big_name", bigName)
 								.addTag("name", result[0])
 								.addTag("generate_time", time)
 								.addField("value", fieldValue)
@@ -128,5 +136,9 @@ public class DataNettyInboundHandler extends AbstractNettyInboundHandler {
 				}
 			}
 		}
+	}
+	private String typeTobigType(String type) {
+		String bigType = type.replaceAll("\\d+", "");
+		return bigType;
 	}
 }
