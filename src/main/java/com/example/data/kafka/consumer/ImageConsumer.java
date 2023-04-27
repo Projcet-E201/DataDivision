@@ -11,7 +11,6 @@ public class ImageConsumer extends ImageHandler {
 
     @KafkaListener(topics="IMAGE", groupId = "IMAGE-CONSUMER-GROUP")
     public void consumeImage(String message) throws Exception {
-        log.info("Receive Image: {}", message);
         channelRead0(message);
     }
 }

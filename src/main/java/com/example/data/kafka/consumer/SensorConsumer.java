@@ -16,7 +16,6 @@ public class SensorConsumer extends SensorHandler {
 
     @KafkaListener(topics="CLIENT1", groupId = "CONSUMER-GROUP-1", concurrency = "3")
     public void consumeServer1(String message) {
-        log.info("Receive Sensor : {}", message);
         channelRead0(message);
     }
 }
