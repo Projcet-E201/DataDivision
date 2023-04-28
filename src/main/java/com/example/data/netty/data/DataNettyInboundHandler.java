@@ -44,7 +44,7 @@ public class DataNettyInboundHandler extends AbstractNettyInboundHandler {
 		if (!type.startsWith("MACHINE_STATE")) {
 			try {
 				String bigName = typeTobigType(type);
-				long fieldValue = Long.parseLong(value);
+				float fieldValue = Float.parseFloat(value);
 				Point row = Point
 						.measurement(server)
 						.addTag("big_name", bigName)
@@ -56,7 +56,7 @@ public class DataNettyInboundHandler extends AbstractNettyInboundHandler {
 				writeApi.writePoint("three day", "semse",row);
 //				log.info("fieldValue = {}",fieldValue);
 			} catch (NumberFormatException e) {
-				log.error("Failed to parse value {} as a Long. Exception message: {}", value, e.getMessage());
+				log.error("Failed to parse value {} as a Long. Exception message: {} {}",type, value, e.getMessage());
 				// 예외 처리 로직 추가
 			} catch (Exception e) {
 				log.error("Unexpected error occurred while adding TS data. Exception message: {}", e.getMessage());
@@ -64,11 +64,12 @@ public class DataNettyInboundHandler extends AbstractNettyInboundHandler {
 			}
 		} else {
 			// Machine State
+//			System.out.println("value = " + value);
 			String[] value_lst = value.split(",");
 			for (int i = 0; i < value_lst.length; i++) {
 				String[] result = value_lst[i].split(":");
 				String bigName = typeTobigType(result[0]);
-				log.info(Arrays.toString(result));
+//				log.info(Arrays.toString(result));
 				if (result[0].startsWith("string")) {
 					try {
 						Point row = Point
@@ -82,10 +83,10 @@ public class DataNettyInboundHandler extends AbstractNettyInboundHandler {
 						writeApi.writePoint("day", "semse",row);
 //						log.info("string = {} ",result[0]);
 					} catch (NumberFormatException e) {
-						log.error("Failed to parse value {} as a Long. Exception message: {}", result[1], e.getMessage());
+						log.error("Machine State String Failed to parse value {} as a Long. Exception message: {} {}", result[0], result[1], e.getMessage());
 						// 예외 처리 로직 추가
 					} catch (Exception e) {
-						log.error("Unexpected error occurred while adding TS data. Exception message: {}", e.getMessage());
+						log.error("Machine State String Unexpected error occurred while adding TS data. Exception message: {}", e.getMessage());
 						// 예외 처리 로직 추가
 					}
 				} else if (result[0].startsWith("double")) {
@@ -102,18 +103,17 @@ public class DataNettyInboundHandler extends AbstractNettyInboundHandler {
 						writeApi.writePoint("day", "semse",row);
 //						log.info("double = {}",result[0]);
 					} catch (NumberFormatException e) {
-						log.error("Failed to parse value {} as a Long. Exception message: {}", result[1], e.getMessage());
+						log.error("Machine State Double Failed to parse value {} as a Long. Exception message: {}", result[1], e.getMessage());
 						influxDBClient.close();
 						// 예외 처리 로직 추가
 					} catch (Exception e) {
-						log.error("Unexpected error occurred while adding TS data. Exception message: {}", e.getMessage());
+						log.error("Machine State Double Unexpected error occurred while adding TS data. Exception message: {}", e.getMessage());
 						influxDBClient.close();
 						// 예외 처리 로직 추가
 					}
 				} else {
 					try {
 						int fieldValue = Integer.parseInt(result[1]);
-						System.out.println("fieldValue = " + fieldValue);
 						Point row = Point
 								.measurement(server)
 								.addTag("big_name", bigName)
@@ -125,11 +125,11 @@ public class DataNettyInboundHandler extends AbstractNettyInboundHandler {
 						writeApi.writePoint("day", "semse",row);
 //						log.info("int || boolean = {}",result[1]);
 					} catch (NumberFormatException e) {
-						log.error("Failed to parse value {} as a Long. Exception message: {}", result[1], e.getMessage());
+						log.error("Machine State Integer Failed to parse value {} as a Long. Exception message: {}", result[1], e.getMessage());
 						influxDBClient.close();
 						// 예외 처리 로직 추가
 					} catch (Exception e) {
-						log.error("Unexpected error occurred while adding TS data. Exception message: {}", e.getMessage());
+						log.error("Machine State Integer Unexpected error occurred while adding TS data. Exception message: {}", e.getMessage());
 						influxDBClient.close();
 						// 예외 처리 로직 추가
 					}
@@ -137,6 +137,7 @@ public class DataNettyInboundHandler extends AbstractNettyInboundHandler {
 			}
 		}
 	}
+
 	private String typeTobigType(String type) {
 		String bigType = type.replaceAll("\\d+", "");
 		return bigType;
