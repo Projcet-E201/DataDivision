@@ -17,9 +17,8 @@ public class MachineStateConsumer extends MachineStateHandler {
     }
 
     @KafkaListener(topics="MACHINE_STATE", groupId = "MACHINE_STATE-CONSUMER-GROUP", concurrency = "3")
-    public void consumeServer1(String message) throws IOException {
-//        log.info("Receive MachineState: {}", message);
-//        channelRead0(message);
+    public void consumeServer1(String message) {
+        channelRead0(message);
     }
 
 }

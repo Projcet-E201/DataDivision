@@ -30,8 +30,8 @@ public abstract class AbstractHandler {
 			dataMap.put("dataServer", dataParts[0]);
 			dataMap.put("dataType", dataParts[1]);
 			dataMap.put("dataValue", dataParts[2]);
-			dataMap.put("dataTime", dataParts[3]);
-			dataMap.put("dataIdentifier", dataParts[4]);
+			dataMap.put("dataIdentifier", dataParts[3]);
+			dataMap.put("dataTime", dataParts[4]);
 		}
 
 		else{

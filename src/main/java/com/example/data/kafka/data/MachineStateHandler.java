@@ -72,7 +72,7 @@ public class MachineStateHandler extends AbstractHandler {
                 }
             } else {
                 try {
-                    Long fieldValue = Long.parseLong(result[1]);
+                    int fieldValue = Integer.parseInt(result[1]);
                     Point row = Point
                             .measurement(server)
                             .addTag("name", result[0])

@@ -13,7 +13,6 @@ public class AnalogConsumer extends AnalogHandler {
 
     @KafkaListener(topics="ANALOG", groupId = "ANALOG-CONSUMER-GROUP", concurrency = "3")
     public void consumeAnalog(String message) throws IOException {
-        log.info("Receive Analog: {}" , message);
         channelRead0(message);
     }
 }
