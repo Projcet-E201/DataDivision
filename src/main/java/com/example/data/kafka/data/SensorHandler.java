@@ -29,14 +29,15 @@ public class SensorHandler extends AbstractHandler {
 	private void addTSData(String server, String type, String value, String time) {
 		try {
 			long fieldValue = Long.parseLong(value);
+			String dataType = type.replaceAll("[0-9]", "");
 			Point row = Point
-					.measurement(server)
+					.measurement(dataType)
 					.addTag("name", type)
 					.addTag("generate_time", time)
 					.addField("value", fieldValue)
 					.time(Instant.now(), WritePrecision.NS);
 			WriteApiBlocking writeApi = influxDBClient.getWriteApiBlocking();
-			writeApi.writePoint("threeday", "semse",row);
+			writeApi.writePoint(server, "semse",row);
 //				log.info("fieldValue = {}",fieldValue);
 		} catch (NumberFormatException e) {
 			log.error("Failed to parse value {} as a Long. Exception message: {}", value, e.getMessage());
