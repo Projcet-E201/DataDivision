@@ -23,7 +23,9 @@ public class ImageHandler extends AbstractHandler {
 
 	protected void channelRead0(String msg) throws Exception {
 		Map<String, String> receiveData = parseData(msg);
-		log.info("Parse Image: {} {} {} {}" , receiveData.get("dataServer"), receiveData.get("dataType"), receiveData.get("dataTime"), receiveData.get("dataIdentifier"));
+//		log.info("Receive Image: {} {} {} {}" , receiveData.get("dataServer"), receiveData.get("dataType"), receiveData.get("dataTime"), receiveData.get("dataIdentifier"));
+		log.info("Receive Image: {}" , receiveData.get("dataTime"));
+
 
 		// 데이터를 나눠서 보내는 경우, 모아두는 코드
 		dataMap.putIfAbsent(receiveData.get("dataIdentifier"), new StringBuilder());
@@ -46,12 +48,12 @@ public class ImageHandler extends AbstractHandler {
 
 			// 경로에 폴더가 없으면 생성
 			if (!Files.exists(savePath.getParent())) {
-				log.info("Creating directories: {}", savePath.getParent());
+//				log.info("Creating directories: {}", savePath.getParent());
 				Files.createDirectories(savePath.getParent());
 			}
 
 			// 이미지 데이터를 파일로 저장
-			log.info("Saving image to: {}", savePath);
+//			log.info("Saving image to: {}", savePath);
 			Files.write(savePath, decodedImageData);
 		}
 	}

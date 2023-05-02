@@ -2,12 +2,6 @@ spring:
   profiles:
     active: local, secret
 
-  influxdb:
-#    url: http://localhost:8086
-    url: http://k8e2011.p.ssafy.io:8086
-    org: semse
-    bucket: semse, day, week, month
-
   jpa:
     properties:
       hibernate:

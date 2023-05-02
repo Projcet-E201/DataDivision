@@ -30,22 +30,24 @@ public class MachineStateHandler extends AbstractHandler {
         String[] value_lst = value.split(",");
         for (int i = 0; i < value_lst.length; i++) {
             String[] result = value_lst[i].split(":");
+            String bigName = type.replaceAll("[0-9]", "");
             log.info(Arrays.toString(result));
             if (result[0].startsWith("string")) {
                 try {
                     Point row = Point
                             .measurement(server)
+                            .addTag("big_name", bigName)
                             .addTag("name", result[0])
                             .addTag("generate_time", time)
                             .addField("value_str", result[1])
                             .time(Instant.now(), WritePrecision.NS);
                     WriteApiBlocking writeApi = influxDBClient.getWriteApiBlocking();
-                    writeApi.writePoint("day", "semse",row);
+                    writeApi.writePoint("day", "semse", row);
                 } catch (NumberFormatException e) {
-                    log.error("Failed to parse value {} as a Long. Exception message: {}", result[1], e.getMessage());
+                    log.error("Machine State String Failed to parse value {} as a Long. Exception message: {} {}", result[0], result[1], e.getMessage());
                     // 예외 처리 로직 추가
                 } catch (Exception e) {
-                    log.error("Unexpected error occurred while adding TS data. Exception message: {}", e.getMessage());
+                    log.error("Machine State String Unexpected error occurred while adding TS data. Exception message: {}", e.getMessage());
                     // 예외 처리 로직 추가
                 }
             } else if (result[0].startsWith("double")) {
@@ -53,6 +55,7 @@ public class MachineStateHandler extends AbstractHandler {
                     Double fieldValue = Double.parseDouble(result[1]);
                     Point row = Point
                             .measurement(server)
+                            .addTag("big_name", bigName)
                             .addTag("name", result[0])
                             .addTag("generate_time", time)
                             .addField("value_double", fieldValue)
@@ -60,11 +63,11 @@ public class MachineStateHandler extends AbstractHandler {
                     WriteApiBlocking writeApi = influxDBClient.getWriteApiBlocking();
                     writeApi.writePoint("day", "semse",row);
                 } catch (NumberFormatException e) {
-                    log.error("Failed to parse value {} as a Long. Exception message: {}", result[1], e.getMessage());
+                    log.error("Machine State Double Failed to parse value {} as a Long. Exception message: {}", result[1], e.getMessage());
                     influxDBClient.close();
                     // 예외 처리 로직 추가
                 } catch (Exception e) {
-                    log.error("Unexpected error occurred while adding TS data. Exception message: {}", e.getMessage());
+                    log.error("Machine State Double Unexpected error occurred while adding TS data. Exception message: {}", e.getMessage());
                     influxDBClient.close();
                     // 예외 처리 로직 추가
                 }
@@ -73,6 +76,7 @@ public class MachineStateHandler extends AbstractHandler {
                     int fieldValue = Integer.parseInt(result[1]);
                     Point row = Point
                             .measurement(server)
+                            .addTag("big_name", bigName)
                             .addTag("name", result[0])
                             .addTag("generate_time", time)
                             .addField("value", fieldValue)
@@ -80,11 +84,11 @@ public class MachineStateHandler extends AbstractHandler {
                     WriteApiBlocking writeApi = influxDBClient.getWriteApiBlocking();
                     writeApi.writePoint("day", "semse",row);
                 } catch (NumberFormatException e) {
-                    log.error("Failed to parse value {} as a Long. Exception message: {}", result[1], e.getMessage());
+                    log.error("Machine State Integer Failed to parse value {} as a Long. Exception message: {}", result[1], e.getMessage());
                     influxDBClient.close();
                     // 예외 처리 로직 추가
                 } catch (Exception e) {
-                    log.error("Unexpected error occurred while adding TS data. Exception message: {}", e.getMessage());
+                    log.error("Machine State Integer Unexpected error occurred while adding TS data. Exception message: {}", e.getMessage());
                     influxDBClient.close();
                     // 예외 처리 로직 추가
                 }

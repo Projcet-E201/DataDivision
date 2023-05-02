@@ -27,7 +27,7 @@ public class SensorHandler extends AbstractHandler {
 
 	private void addTSData(String server, String type, String value, String time) {
 		try {
-			long fieldValue = Long.parseLong(value);
+			float fieldValue = Float.parseFloat(value);
 			String dataType = type.replaceAll("[0-9]", "");
 			Point row = Point
 					.measurement(dataType)
