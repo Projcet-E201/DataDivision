@@ -41,7 +41,6 @@ public class MachineStateHandler extends AbstractHandler {
                             .time(Instant.now(), WritePrecision.NS);
                     WriteApiBlocking writeApi = influxDBClient.getWriteApiBlocking();
                     writeApi.writePoint("day", "semse",row);
-//						log.info("string = {} ",result[0]);
                 } catch (NumberFormatException e) {
                     log.error("Failed to parse value {} as a Long. Exception message: {}", result[1], e.getMessage());
                     // 예외 처리 로직 추가
@@ -60,7 +59,6 @@ public class MachineStateHandler extends AbstractHandler {
                             .time(Instant.now(), WritePrecision.NS);
                     WriteApiBlocking writeApi = influxDBClient.getWriteApiBlocking();
                     writeApi.writePoint("day", "semse",row);
-//						log.info("double = {}",result[0]);
                 } catch (NumberFormatException e) {
                     log.error("Failed to parse value {} as a Long. Exception message: {}", result[1], e.getMessage());
                     influxDBClient.close();
@@ -81,7 +79,6 @@ public class MachineStateHandler extends AbstractHandler {
                             .time(Instant.now(), WritePrecision.NS);
                     WriteApiBlocking writeApi = influxDBClient.getWriteApiBlocking();
                     writeApi.writePoint("day", "semse",row);
-//						log.info("int || boolean = {}",result[1]);
                 } catch (NumberFormatException e) {
                     log.error("Failed to parse value {} as a Long. Exception message: {}", result[1], e.getMessage());
                     influxDBClient.close();

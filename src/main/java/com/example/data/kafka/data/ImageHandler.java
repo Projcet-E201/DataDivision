@@ -21,7 +21,6 @@ public class ImageHandler extends AbstractHandler {
 
 	private static final String IMAGE_SAVE_PATH = "received_images";
 
-	// 데이터를 읽어들임.
 	protected void channelRead0(String msg) throws Exception {
 		Map<String, String> receiveData = parseData(msg);
 		log.info("Parse Image: {} {} {} {}" , receiveData.get("dataServer"), receiveData.get("dataType"), receiveData.get("dataTime"), receiveData.get("dataIdentifier"));

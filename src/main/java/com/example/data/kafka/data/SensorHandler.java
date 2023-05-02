@@ -19,7 +19,6 @@ public class SensorHandler extends AbstractHandler {
 
 	private final InfluxDBClient influxDBClient;
 
-	// 데이터를 읽어들임.
 	protected void channelRead0(String msg) {
 		Map<String, String> receiveData = parseData(msg);
 		log.info("Parse Sensor : {} {} {} {}", receiveData.get("dataServer"), receiveData.get("dataType"), receiveData.get("dataValue"), receiveData.get("dataTime"));
@@ -38,7 +37,6 @@ public class SensorHandler extends AbstractHandler {
 					.time(Instant.now(), WritePrecision.NS);
 			WriteApiBlocking writeApi = influxDBClient.getWriteApiBlocking();
 			writeApi.writePoint(server, "semse",row);
-//				log.info("fieldValue = {}",fieldValue);
 		} catch (NumberFormatException e) {
 			log.error("Failed to parse value {} as a Long. Exception message: {}", value, e.getMessage());
 			// 예외 처리 로직 추가
