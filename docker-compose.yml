@@ -1,6 +1,6 @@
 version: "3"
 services:
-  data_division:
+  dev-back-blue:
     container_name: data_division
     build:
       context: .
@@ -9,9 +9,9 @@ services:
         PROFILE: "prod"
     ports:
       - "8090:8090"
-      - "9090:9090"
-      - "9091:9091"
-      - "9092:9092"
+      - "9997:9997"
+      - "9998:9998"
+      - "9999:9999"
     networks:
       - br_app
 

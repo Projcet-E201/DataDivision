@@ -1,4 +1,4 @@
-package com.example.data.util.constants;
+package com.example.data.util;
 
 public enum SensorType {
 	MOTOR,

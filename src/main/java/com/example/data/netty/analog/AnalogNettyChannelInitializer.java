@@ -1,8 +1,6 @@
-package com.example.data.netty.socket;
+package com.example.data.netty.analog;
 
 import org.springframework.stereotype.Component;
-
-import com.example.data.netty.handler.NettyInboundHandler;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -15,18 +13,19 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-public class NettyChannelInitializer extends ChannelInitializer<SocketChannel> {
+public class AnalogNettyChannelInitializer extends ChannelInitializer<SocketChannel> {
 
-	private final NettyInboundHandler nettyInboundHandler;
+	private final AnalogNettyInboundHandler analogNettyInboundHandler;
 
 	@Override
-	protected void initChannel(SocketChannel socketChannel) throws Exception {
+	protected void initChannel(SocketChannel socketChannel) {
 		ChannelPipeline pipeline = socketChannel.pipeline();
 
 		ByteBuf delimiter = Unpooled.copiedBuffer("\n", CharsetUtil.UTF_8);
-		pipeline.addLast(new DelimiterBasedFrameDecoder(4098, delimiter)); // max frame length: 8192
+		int maxFrameLength = 5 * 1024 * 1024; // 5MB
+		pipeline.addLast(new DelimiterBasedFrameDecoder(maxFrameLength, delimiter));
 
 		// Inbound 핸들러 등록
-		pipeline.addLast(nettyInboundHandler);
+		pipeline.addLast(analogNettyInboundHandler);
 	}
 }
