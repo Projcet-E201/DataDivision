@@ -1,20 +1,14 @@
 package com.example.data.netty.data;
 
 import java.time.Instant;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
-
+import java.util.ArrayDeque;
+import java.util.Deque;
 import com.example.data.netty.global.handler.AbstractNettyInboundHandler;
-import com.influxdb.annotations.Column;
-import com.influxdb.annotations.Measurement;
 import com.influxdb.client.InfluxDBClient;
-import com.influxdb.client.InfluxDBClientFactory;
-import com.influxdb.client.WriteApi;
 import com.influxdb.client.WriteApiBlocking;
 import com.influxdb.client.domain.WritePrecision;
 import com.influxdb.client.write.Point;
-import com.influxdb.query.FluxTable;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
@@ -36,7 +30,6 @@ public class DataNettyInboundHandler extends AbstractNettyInboundHandler {
 	protected void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) {
 		Map<String, String> receiveData = parseData(msg.toString(CharsetUtil.UTF_8));
 //		log.info("Receive Data: {} {} {} {}", receiveData.get("dataServer"), receiveData.get("dataType"), receiveData.get("dataValue"), receiveData.get("dataTime"));
-		log.info("Receive Data: {}", receiveData.get("dataTime"));
 		addTSData(receiveData.get("dataServer"), receiveData.get("dataType"), receiveData.get("dataValue"), receiveData.get("dataTime"));
 	}
 
@@ -44,16 +37,16 @@ public class DataNettyInboundHandler extends AbstractNettyInboundHandler {
 		if (!type.startsWith("MACHINE_STATE")) {
 			try {
 				String bigName = typeTobigType(type);
+				System.out.println("server = " + server);
 				float fieldValue = Float.parseFloat(value);
 				Point row = Point
-						.measurement(server)
-						.addTag("big_name", bigName)
+						.measurement(bigName)
 						.addTag("name", type)
 						.addTag("generate_time", time)
 						.addField("value", fieldValue)
 						.time(Instant.now(), WritePrecision.NS);
 				WriteApiBlocking writeApi = influxDBClient.getWriteApiBlocking();
-				writeApi.writePoint("three day", "semse",row);
+				writeApi.writePoint(server, "semse",row);
 //				log.info("fieldValue = {}",fieldValue);
 			} catch (NumberFormatException e) {
 				log.error("Failed to parse value {} as a Long. Exception message: {} {}",type, value, e.getMessage());
