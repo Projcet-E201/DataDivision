@@ -1,23 +1,20 @@
 version: "3"
 services:
-  dev-back-blue:
-    container_name: tcp-server
+  data_division:
+    container_name: data_division
     build:
       context: .
       dockerfile: Dockerfile
       args:
         PROFILE: "prod"
     ports:
-      - "8050:8050"
+      - "8090:8090"
       - "9090:9090"
       - "9091:9091"
       - "9092:9092"
     networks:
-      - br_log
       - br_app
 
 networks:
-  br_log:
-    external: true
   br_app:
     external: true
