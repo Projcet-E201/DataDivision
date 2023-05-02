@@ -37,7 +37,7 @@ public class DataNettyInboundHandler extends AbstractNettyInboundHandler {
 		if (!type.startsWith("MACHINE_STATE")) {
 			try {
 				String bigName = typeTobigType(type);
-				System.out.println("server = " + server);
+				log.info("server = " + server);
 				float fieldValue = Float.parseFloat(value);
 				Point row = Point
 						.measurement(bigName)
