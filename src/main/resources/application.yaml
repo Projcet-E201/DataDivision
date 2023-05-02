@@ -1,7 +1,4 @@
 spring:
-  profiles:
-    active: local, secret
-
   influxdb:
 #    url: http://localhost:8086
     url: http://k8e2011.p.ssafy.io:8086
@@ -25,10 +22,14 @@ spring:
     serialization:
       fail-on-empty-beans: false
 
-  servlet:
-    multipart:
-      max-file-size: 5MB
-      max-request-size: 5MB
 
+netty:
+  data-port: 9997
+  analog-port: 9998
+  image-port: 9999
+  boss-count: 10
+  worker-count: 10
+  keep-alive: true
+  backlog: 100
 
 

@@ -1,20 +1,13 @@
 server:
   port: 8090
 
-netty:
-  data-port: 9997
-  analog-port: 9998
-  image-port: 9999
-  boss-count: 10
-  worker-count: 10
-  keep-alive: true
-  backlog: 100
-
 
 spring:
 #  datasource:
 #    driver-class-name: com.mysql.cj.jdbc.Driver
 #    url: jdbc:mysql://localhost:3306/data?useUnicode=true&characterEncoding=UTF-8&characterSetResults=UTF-8&serverTimezone=Asia/Seoul
+  profiles:
+    active: secret
 
   jpa:
     hibernate:
