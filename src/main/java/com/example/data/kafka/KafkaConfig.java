@@ -25,6 +25,9 @@ public class KafkaConfig {
         config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
 
+        config.put(ConsumerConfig.MAX_POLL_INTERVAL_MS_CONFIG, 900000);
+        config.put(ConsumerConfig.HEARTBEAT_INTERVAL_MS_CONFIG, 1000);
+
         return new DefaultKafkaConsumerFactory<>(config);
     }
 

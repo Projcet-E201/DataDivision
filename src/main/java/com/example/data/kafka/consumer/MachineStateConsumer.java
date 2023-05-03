@@ -17,8 +17,12 @@ public class MachineStateConsumer extends MachineStateHandler {
     }
 
     @KafkaListener(topics="MACHINE_STATE", groupId = "MACHINE_STATE-CONSUMER-GROUP", concurrency = "3")
-    public void consumeServer1(String message) {
+    public void consume1(String message) {
         channelRead0(message);
     }
 
+    @KafkaListener(topics="MACHINE_STATE", groupId = "MACHINE_STATE-CONSUMER-GROUP", concurrency = "3")
+    public void consume2(String message) {
+        channelRead0(message);
+    }
 }
