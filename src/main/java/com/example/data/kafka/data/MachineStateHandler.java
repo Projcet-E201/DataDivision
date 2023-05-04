@@ -10,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Map;
 
@@ -22,16 +24,22 @@ public class MachineStateHandler extends AbstractHandler {
 
     protected void channelRead0(String msg) {
         Map<String, String> receiveData = parseData(msg);
-        log.info("Parse MachineState : {} {} {} {}", receiveData.get("dataServer"), receiveData.get("dataType"), receiveData.get("dataValue"), receiveData.get("dataTime"));
+//        log.info("Parse MachineState : {} {} {}", receiveData.get("dataServer"), receiveData.get("dataType"),  receiveData.get("dataTime"));
+
+        LocalDateTime currentTime = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd/HH:mm:ss");
+        String formattedDateTime = currentTime.format(formatter);
+        log.info("generate time : {}, receive time : {} ", receiveData.get("dataTime"), formattedDateTime);
+
         addTSData(receiveData.get("dataServer"), receiveData.get("dataType"), receiveData.get("dataValue"), receiveData.get("dataTime"));
     }
 
     private void addTSData(String server, String type, String value, String time) {
+        long startTime = System.currentTimeMillis();
         String[] value_lst = value.split(",");
         for (int i = 0; i < value_lst.length; i++) {
             String[] result = value_lst[i].split(":");
             String bigName = type.replaceAll("[0-9]", "");
-            log.info(Arrays.toString(result));
             if (result[0].startsWith("string")) {
                 try {
                     Point row = Point
@@ -43,6 +51,7 @@ public class MachineStateHandler extends AbstractHandler {
                             .time(Instant.now(), WritePrecision.NS);
                     WriteApiBlocking writeApi = influxDBClient.getWriteApiBlocking();
                     writeApi.writePoint("day", "semse", row);
+
                 } catch (NumberFormatException e) {
                     log.error("Machine State String Failed to parse value {} as a Long. Exception message: {} {}", result[0], result[1], e.getMessage());
                     // 예외 처리 로직 추가
@@ -62,6 +71,7 @@ public class MachineStateHandler extends AbstractHandler {
                             .time(Instant.now(), WritePrecision.NS);
                     WriteApiBlocking writeApi = influxDBClient.getWriteApiBlocking();
                     writeApi.writePoint("day", "semse",row);
+
                 } catch (NumberFormatException e) {
                     log.error("Machine State Double Failed to parse value {} as a Long. Exception message: {}", result[1], e.getMessage());
                     influxDBClient.close();
@@ -94,6 +104,8 @@ public class MachineStateHandler extends AbstractHandler {
                 }
             }
         }
+        long endTime = System.currentTimeMillis();
+        log.info("{} {}, DB 저장 : {} ms", server, type, endTime - startTime);
     }
 
 }

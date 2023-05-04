@@ -24,7 +24,7 @@ public class ImageHandler extends AbstractHandler {
 	protected void channelRead0(String msg) throws Exception {
 		Map<String, String> receiveData = parseData(msg);
 //		log.info("Receive Image: {} {} {} {}" , receiveData.get("dataServer"), receiveData.get("dataType"), receiveData.get("dataTime"), receiveData.get("dataIdentifier"));
-		log.info("Receive Image: {}" , receiveData.get("dataTime"));
+//		log.info("Receive Image: {}" , receiveData.get("dataTime"));
 
 
 		// 데이터를 나눠서 보내는 경우, 모아두는 코드

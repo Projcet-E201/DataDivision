@@ -1,5 +1,6 @@
 package com.example.data.kafka.consumer;
 
+import com.example.data.kafka.KafkaConfig;
 import com.example.data.kafka.data.MachineStateHandler;
 import com.influxdb.client.InfluxDBClient;
 import lombok.extern.slf4j.Slf4j;
@@ -16,13 +17,13 @@ public class MachineStateConsumer extends MachineStateHandler {
         super(influxDBClient);
     }
 
-    @KafkaListener(topics="MACHINE_STATE", groupId = "MACHINE_STATE-CONSUMER-GROUP", concurrency = "3")
-    public void consume1(String message) {
+    @KafkaListener(
+            topics="MACHINE_STATE",
+            groupId = "MACHINE_STATE-CONSUMER-GROUP",
+            containerFactory = "containerFactory",
+            concurrency = "4")
+    public void consume(String message) {
         channelRead0(message);
     }
 
-    @KafkaListener(topics="MACHINE_STATE", groupId = "MACHINE_STATE-CONSUMER-GROUP", concurrency = "3")
-    public void consume2(String message) {
-        channelRead0(message);
-    }
 }

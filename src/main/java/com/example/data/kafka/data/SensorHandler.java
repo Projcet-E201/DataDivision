@@ -21,11 +21,12 @@ public class SensorHandler extends AbstractHandler {
 
 	protected void channelRead0(String msg) {
 		Map<String, String> receiveData = parseData(msg);
-		log.info("Parse Sensor : {} {} {} {}", receiveData.get("dataServer"), receiveData.get("dataType"), receiveData.get("dataValue"), receiveData.get("dataTime"));
+//		log.info("Parse Sensor : {} {} {} {}", receiveData.get("dataServer"), receiveData.get("dataType"), receiveData.get("dataValue"), receiveData.get("dataTime"));
 		addTSData(receiveData.get("dataServer"), receiveData.get("dataType"), receiveData.get("dataValue"), receiveData.get("dataTime"));
 	}
 
 	private void addTSData(String server, String type, String value, String time) {
+		long startTime = System.currentTimeMillis();
 		try {
 			float fieldValue = Float.parseFloat(value);
 			String dataType = type.replaceAll("[0-9]", "");
@@ -44,5 +45,7 @@ public class SensorHandler extends AbstractHandler {
 			log.error("Unexpected error occurred while adding TS data. Exception message: {}", e.getMessage());
 			// 예외 처리 로직 추가
 		}
+		long endTime = System.currentTimeMillis();
+		log.info("{} {}, DB 저장 : {} ms", server, type, endTime - startTime);
 	}
 }

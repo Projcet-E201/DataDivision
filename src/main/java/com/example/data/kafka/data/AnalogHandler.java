@@ -29,7 +29,7 @@ public class AnalogHandler extends AbstractHandler {
 
 	protected void channelRead0(String msg) throws IOException {
 		Map<String, String> receiveData = parseData(msg);
-		log.info("Parse Analog: {} {} {}" , receiveData.get("dataServer"), receiveData.get("dataType"), receiveData.get("dataTime"));
+//		log.info("Parse Analog: {} {} {}" , receiveData.get("dataServer"), receiveData.get("dataType"), receiveData.get("dataTime"));
 
 		if (receiveData.get("dataValue").endsWith("|")) {
 			String fullData = receiveData.get("dataValue").trim().replace("|", "");

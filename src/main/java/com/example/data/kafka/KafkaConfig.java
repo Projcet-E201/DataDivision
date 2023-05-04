@@ -25,15 +25,17 @@ public class KafkaConfig {
         config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
 
-        config.put(ConsumerConfig.MAX_POLL_INTERVAL_MS_CONFIG, 900000);
-        config.put(ConsumerConfig.HEARTBEAT_INTERVAL_MS_CONFIG, 1000);
+        config.put(ConsumerConfig.MAX_POLL_INTERVAL_MS_CONFIG, 600000);  // 데이터 최대 처리시간 : 10분
+        config.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, 2);           // 한 번에 가져오는 최대 메시지 수
 
         return new DefaultKafkaConsumerFactory<>(config);
     }
 
-    public ConcurrentKafkaListenerContainerFactory containerFactory() {
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, String> containerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory());
+        factory.setConcurrency(3);
         return factory;
     }
 }
