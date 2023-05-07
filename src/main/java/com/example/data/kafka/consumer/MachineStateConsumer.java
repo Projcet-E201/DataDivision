@@ -1,13 +1,10 @@
 package com.example.data.kafka.consumer;
 
-import com.example.data.kafka.KafkaConfig;
 import com.example.data.kafka.data.MachineStateHandler;
 import com.influxdb.client.InfluxDBClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
-
-import java.io.IOException;
 
 @Slf4j
 @Component
