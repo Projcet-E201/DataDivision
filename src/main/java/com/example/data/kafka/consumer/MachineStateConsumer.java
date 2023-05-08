@@ -2,6 +2,7 @@ package com.example.data.kafka.consumer;
 
 import com.example.data.kafka.data.MachineStateHandler;
 import com.influxdb.client.InfluxDBClient;
+import com.influxdb.client.WriteApi;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
@@ -10,8 +11,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class MachineStateConsumer extends MachineStateHandler {
 
-    public MachineStateConsumer(InfluxDBClient influxDBClient) {
-        super(influxDBClient);
+    public MachineStateConsumer(WriteApi writeApi) {
+        super(writeApi);
     }
 
     @KafkaListener(

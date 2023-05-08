@@ -15,13 +15,10 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class SensorHandler extends AbstractHandler {
 
 	private final WriteApi writeApi;
-
-	public SensorHandler(InfluxDBClient influxDBClient) {
-		this.writeApi = influxDBClient.makeWriteApi();
-	}
 
 	protected void channelRead0(String msg) {
 		Map<String, String> receiveData = parseData(msg);

@@ -11,8 +11,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class SensorConsumer extends SensorHandler {
 
-    public SensorConsumer(InfluxDBClient influxDBClient) {
-        super(influxDBClient);
+
+    public SensorConsumer(WriteApi writeApi) {
+        super(writeApi);
     }
 
     @KafkaListener(topics="CLIENT1", groupId = "CONSUMER-GROUP-1", concurrency = "3")

@@ -1,10 +1,10 @@
 package com.example.data.kafka.data;
 
 import com.example.data.kafka.data.global.AbstractHandler;
-import com.influxdb.client.InfluxDBClient;
 import com.influxdb.client.WriteApi;
 import com.influxdb.client.domain.WritePrecision;
 import com.influxdb.client.write.Point;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -15,13 +15,10 @@ import java.util.Map;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class MachineStateHandler extends AbstractHandler {
 
     private final WriteApi writeApi;
-
-    public MachineStateHandler(InfluxDBClient influxDBClient) {
-        this.writeApi = influxDBClient.makeWriteApi();
-    }
 
     protected void channelRead0(String msg) {
         Map<String, String> receiveData = parseData(msg);
