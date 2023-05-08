@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.example.data.kafka.data.global.AbstractHandler;
 import com.influxdb.client.InfluxDBClient;
+import com.influxdb.client.WriteApi;
 import com.influxdb.client.WriteApiBlocking;
 import com.influxdb.client.domain.WritePrecision;
 import com.influxdb.client.write.Point;
@@ -14,10 +15,13 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-@RequiredArgsConstructor
 public class SensorHandler extends AbstractHandler {
 
-	private final InfluxDBClient influxDBClient;
+	private final WriteApi writeApi;
+
+	public SensorHandler(InfluxDBClient influxDBClient) {
+		this.writeApi = influxDBClient.makeWriteApi();
+	}
 
 	protected void channelRead0(String msg) {
 		Map<String, String> receiveData = parseData(msg);
@@ -35,8 +39,7 @@ public class SensorHandler extends AbstractHandler {
 					.addTag("generate_time", time)
 					.addField("value", fieldValue)
 					.time(Instant.now(), WritePrecision.NS);
-			WriteApiBlocking writeApi = influxDBClient.getWriteApiBlocking();
-			writeApi.writePoint(server, "semse",row);
+			writeApi.writePoint(server, "semse", row);
 		} catch (NumberFormatException e) {
 			log.error("Failed to parse value {} as a Long. Exception message: {}", value, e.getMessage());
 			// 예외 처리 로직 추가
