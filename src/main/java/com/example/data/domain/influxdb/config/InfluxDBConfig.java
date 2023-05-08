@@ -22,11 +22,8 @@ public class InfluxDBConfig {
     @Value("${spring.influxdb.token}")
     private String token;
 
-
     @Bean
     public InfluxDBClient influxDBClient() {
         return InfluxDBClientFactory.create(url, token.toCharArray());
     }
-
-
 }
