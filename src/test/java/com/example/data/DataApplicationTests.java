@@ -12,5 +12,4 @@ class DataApplicationTests {
 	void contextLoads() {
 	}
 
-
 }
