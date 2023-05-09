@@ -37,7 +37,6 @@ public class MachineStateHandler extends AbstractHandler {
 
         String[] result = value.split(":");
         String bigName = type.replaceAll("[0-9]", "");
-
         try {
             Point row = Point
                     .measurement(server)
@@ -53,7 +52,7 @@ public class MachineStateHandler extends AbstractHandler {
             } else {
                 row.addField("value", Integer.parseInt(result[1]));
             }
-
+            log.info(server);
             writeApi.writePoint("day", "semse", row);
 
         } catch (NumberFormatException e) {
