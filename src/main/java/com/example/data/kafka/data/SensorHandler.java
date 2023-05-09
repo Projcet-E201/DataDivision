@@ -36,6 +36,7 @@ public class SensorHandler extends AbstractHandler {
 					.addTag("generate_time", time)
 					.addField("value", fieldValue)
 					.time(Instant.now(), WritePrecision.NS);
+			log.info(server);
 			writeApi.writePoint(server, "semse", row);
 		} catch (NumberFormatException e) {
 			log.error("Failed to parse value {} as a Long. Exception message: {}", value, e.getMessage());
