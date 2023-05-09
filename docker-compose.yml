@@ -1,7 +1,7 @@
 version: "3"
 services:
   dev-back-blue:
-    container_name: data_division
+    container_name: dataDivision
     build:
       context: .
       dockerfile: Dockerfile
