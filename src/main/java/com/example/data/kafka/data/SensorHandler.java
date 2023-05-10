@@ -28,12 +28,13 @@ public class SensorHandler extends AbstractHandler {
 			float fieldValue = Float.parseFloat(value);
 			String dataType = type.replaceAll("[0-9]", "");
 			Point row = Point
-					.measurement(dataType)
+					.measurement(server)
 					.addTag("name", type)
 					.addTag("generate_time", time)
+					.addTag("big_name",dataType)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
 					.addField("value", fieldValue)
 					.time(Instant.now(), WritePrecision.NS);
-			writeApi.writePoint(server, "semse", row);
+			writeApi.writePoint("week", "semse", row);
 			log.info("saved server for data: {}",server);
 		} catch (NumberFormatException e) {
 			log.error("Failed to parse value {} as a Long. Exception message: {}", value, e.getMessage());
