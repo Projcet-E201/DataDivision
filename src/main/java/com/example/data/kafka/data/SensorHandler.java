@@ -2,11 +2,8 @@ package com.example.data.kafka.data;
 
 import java.time.Instant;
 import java.util.Map;
-
 import com.example.data.kafka.data.global.AbstractHandler;
-import com.influxdb.client.InfluxDBClient;
 import com.influxdb.client.WriteApi;
-import com.influxdb.client.WriteApiBlocking;
 import com.influxdb.client.domain.WritePrecision;
 import com.influxdb.client.write.Point;
 import lombok.RequiredArgsConstructor;
@@ -36,13 +33,15 @@ public class SensorHandler extends AbstractHandler {
 					.addTag("generate_time", time)
 					.addField("value", fieldValue)
 					.time(Instant.now(), WritePrecision.NS);
-			log.info(server);
 			writeApi.writePoint(server, "semse", row);
+			log.info("saved server for data: {}",server);
 		} catch (NumberFormatException e) {
 			log.error("Failed to parse value {} as a Long. Exception message: {}", value, e.getMessage());
+			writeApi.close();
 			// 예외 처리 로직 추가
 		} catch (Exception e) {
 			log.error("Unexpected error occurred while adding TS data. Exception message: {}", e.getMessage());
+			writeApi.close();
 			// 예외 처리 로직 추가
 		}
 	}

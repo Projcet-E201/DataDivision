@@ -57,9 +57,11 @@ public class MachineStateHandler extends AbstractHandler {
 
         } catch (NumberFormatException e) {
             log.error("Machine State Failed to parse value {} as a Long. Exception message: {} {}", result[0], result[1], e.getMessage());
+            writeApi.close();
             // 예외 처리 로직 추가
         } catch (Exception e) {
             log.error("Machine State Unexpected error occurred while adding TS data. Exception message: {}", e.getMessage());
+            writeApi.close();
             // 예외 처리 로직 추가
         }
         long endTime = System.currentTimeMillis();
