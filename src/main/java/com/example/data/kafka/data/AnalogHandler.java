@@ -31,6 +31,11 @@ public class AnalogHandler extends AbstractHandler {
 		Map<String, String> receiveData = parseData(msg);
 //		log.info("Parse Analog: {} {} {}" , receiveData.get("dataServer"), receiveData.get("dataType"), receiveData.get("dataTime"));
 
+		// 데이터를 나눠서 보내는 경우, 모아두는 코드
+		dataMap.putIfAbsent(receiveData.get("dataIdentifier"), new StringBuilder());
+		StringBuilder dataBuilder = dataMap.get(receiveData.get("dataIdentifier"));
+		dataBuilder.append(receiveData.get("dataValue"));
+
 		if (receiveData.get("dataValue").endsWith("|")) {
 			String fullData = receiveData.get("dataValue").trim().replace("|", "");
 
