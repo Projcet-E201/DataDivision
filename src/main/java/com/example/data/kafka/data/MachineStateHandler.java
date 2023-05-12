@@ -4,6 +4,7 @@ import com.example.data.kafka.data.global.AbstractHandler;
 import com.influxdb.client.WriteApi;
 import com.influxdb.client.domain.WritePrecision;
 import com.influxdb.client.write.Point;
+import com.influxdb.client.write.PointSettings;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -27,7 +28,7 @@ public class MachineStateHandler extends AbstractHandler {
         LocalDateTime currentTime = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd/HH:mm:ss");
         String formattedDateTime = currentTime.format(formatter);
-        log.info("generate time : {}, receive time : {} ", receiveData.get("dataTime"), formattedDateTime);
+        log.info("[MACHINE_STATE] generate time : {}, receive time : {} ", receiveData.get("dataTime"), formattedDateTime);
 
         addTSData(receiveData.get("dataServer"), receiveData.get("dataType"), receiveData.get("dataValue"), receiveData.get("dataTime"));
     }
@@ -52,9 +53,10 @@ public class MachineStateHandler extends AbstractHandler {
             } else {
                 row.addField("value", Integer.parseInt(result[1]));
             }
-            log.info(server);
             writeApi.writePoint("day", "semse", row);
 
+            long endTime = System.currentTimeMillis();
+            log.info("{} {}, DB 저장 : {} ms", server, type, endTime - startTime);
         } catch (NumberFormatException e) {
             log.error("Machine State Failed to parse value {} as a Long. Exception message: {} {}", result[0], result[1], e.getMessage());
             writeApi.close();
@@ -64,7 +66,5 @@ public class MachineStateHandler extends AbstractHandler {
             writeApi.close();
             // 예외 처리 로직 추가
         }
-        long endTime = System.currentTimeMillis();
-        log.info("{} {}, DB 저장 : {} ms", server, type, endTime - startTime);
     }
 }

@@ -5,7 +5,6 @@ spring:
   #  datasource:
   #    driver-class-name: com.mysql.cj.jdbc.Driver
   #    url: jdbc:mysql://mysql_container:3306/data?useUnicode=true&characterEncoding=UTF-8&characterSetResults=UTF-8&serverTimezone=Asia/Seoul
-
   influxdb:
     url: http://influxdb:8086
     #    retention-policy: autogen # 데이터를 얼마나 오래 보관할지

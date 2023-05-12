@@ -1,6 +1,8 @@
 package com.example.data.kafka.data;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import com.example.data.kafka.data.global.AbstractHandler;
 import com.influxdb.client.WriteApi;
@@ -20,21 +22,32 @@ public class SensorHandler extends AbstractHandler {
 	protected void channelRead0(String msg) {
 		Map<String, String> receiveData = parseData(msg);
 //		log.info("Parse Sensor : {} {} {} {}", receiveData.get("dataServer"), receiveData.get("dataType"), receiveData.get("dataValue"), receiveData.get("dataTime"));
+
+		LocalDateTime currentTime = LocalDateTime.now();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd/HH:mm:ss");
+		String formattedDateTime = currentTime.format(formatter);
+		log.info("[SENSOR] generate time : {}, receive time : {} ", receiveData.get("dataTime"), formattedDateTime);
+
 		addTSData(receiveData.get("dataServer"), receiveData.get("dataType"), receiveData.get("dataValue"), receiveData.get("dataTime"));
 	}
 
 	private void addTSData(String server, String type, String value, String time) {
+		long startTime = System.currentTimeMillis();
+
 		try {
 			float fieldValue = Float.parseFloat(value);
 			String dataType = type.replaceAll("[0-9]", "");
 			Point row = Point
-					.measurement(dataType)
+					.measurement(server)
 					.addTag("name", type)
 					.addTag("generate_time", time)
+					.addTag("big_name",dataType)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
 					.addField("value", fieldValue)
 					.time(Instant.now(), WritePrecision.NS);
-			writeApi.writePoint(server, "semse", row);
-			log.info("saved server for data: {}",server);
+			writeApi.writePoint("week", "semse", row);
+
+			long endTime = System.currentTimeMillis();
+			log.info("{} {}, DB 저장 : {} ms", server, type, endTime - startTime);
 		} catch (NumberFormatException e) {
 			log.error("Failed to parse value {} as a Long. Exception message: {}", value, e.getMessage());
 			writeApi.close();

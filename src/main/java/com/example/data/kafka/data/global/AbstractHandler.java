@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public abstract class AbstractHandler {
 
+
 	protected Map<String, StringBuilder> dataMap = new ConcurrentHashMap<>();
 
 	protected Map<String, String> parseData(String receivedData) {
