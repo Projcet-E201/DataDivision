@@ -1,5 +1,10 @@
 package com.example.data.kafka.data;
 
+import com.example.data.kafka.data.global.AbstractHandler;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -9,18 +14,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.Base64;
 import java.util.Map;
 
-import org.springframework.stereotype.Component;
-
-import com.example.data.kafka.data.global.AbstractHandler;
-
-import io.netty.channel.ChannelHandler;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-
 
 @Component
 @Slf4j
-@ChannelHandler.Sharable
 @RequiredArgsConstructor
 public class AnalogHandler extends AbstractHandler {
 
@@ -30,6 +26,11 @@ public class AnalogHandler extends AbstractHandler {
 	protected void channelRead0(String msg) throws IOException {
 		Map<String, String> receiveData = parseData(msg);
 //		log.info("Parse Analog: {} {} {}" , receiveData.get("dataServer"), receiveData.get("dataType"), receiveData.get("dataTime"));
+
+		// 데이터를 나눠서 보내는 경우, 모아두는 코드
+		dataMap.putIfAbsent(receiveData.get("dataIdentifier"), new StringBuilder());
+		StringBuilder dataBuilder = dataMap.get(receiveData.get("dataIdentifier"));
+		dataBuilder.append(receiveData.get("dataValue"));
 
 		if (receiveData.get("dataValue").endsWith("|")) {
 			String fullData = receiveData.get("dataValue").trim().replace("|", "");

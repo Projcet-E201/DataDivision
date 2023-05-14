@@ -7,6 +7,7 @@ import com.influxdb.client.WriteOptions;
 import com.influxdb.client.write.PointSettings;
 import com.influxdb.client.write.events.BackpressureEvent;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.influx.InfluxDbProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -40,12 +41,12 @@ public class InfluxDBConfig {
         WriteOptions options = WriteOptions.builder()
                 .batchSize(200) // 한번에 보내는 데이터 량 (기본 1000)
                 .bufferLimit(10_000) // 최대 네트워크 에러시 대략 10초 지연에 대해서 보장
+//                .flushInterval()
                 .build();
 
         WriteApi writeApi = influxDBClient.makeWriteApi(options);
         writeApi.listenEvents(BackpressureEvent.class, event -> {
            //  BackpressureEvent 처리 로직
-
         });
 
         return writeApi;
