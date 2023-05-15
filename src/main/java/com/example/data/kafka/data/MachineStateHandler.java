@@ -20,7 +20,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class MachineStateHandler extends AbstractHandler {
 
-    private static final int BATCH_SIZE = 100;
+    private static final int BATCH_SIZE = 30;
     private final List<Point> points = new ArrayList<>();
 
     private final WriteApi writeApi;
@@ -44,11 +44,11 @@ public class MachineStateHandler extends AbstractHandler {
         String bigName = type.replaceAll("[0-9]", "");
         try {
             Point row = Point
-                    .measurement(server)
-                    .addTag("big_name", bigName)
-                    .addTag("name", result[0])
-                    .addTag("generate_time", time)
-                    .time(Instant.now(), WritePrecision.NS);
+                .measurement(server)
+                .addTag("big_name", bigName)
+                .addTag("name", result[0])
+                .addTag("generate_time", time)
+                .time(Instant.now(), WritePrecision.NS);
 
             if (result[0].startsWith("string")) {
                 row.addField("value_str", result[1]);
