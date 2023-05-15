@@ -11,12 +11,17 @@ import org.springframework.stereotype.Component;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class MachineStateHandler extends AbstractHandler {
+
+    private static final int BATCH_SIZE = 100;
+    private final List<Point> points = new ArrayList<>();
 
     private final WriteApi writeApi;
 
@@ -52,8 +57,14 @@ public class MachineStateHandler extends AbstractHandler {
             } else {
                 row.addField("value", Integer.parseInt(result[1]));
             }
-            log.info(server);
-            writeApi.writePoint("day", "semse", row);
+
+
+            points.add(row);
+            if (points.size() >= BATCH_SIZE) {
+                writeApi.writePoints("day", "semse", new ArrayList<>(points));
+                points.clear();
+                log.info(server);
+            }
 
         } catch (NumberFormatException e) {
             log.error("Machine State Failed to parse value {} as a Long. Exception message: {} {}", result[0], result[1], e.getMessage());
