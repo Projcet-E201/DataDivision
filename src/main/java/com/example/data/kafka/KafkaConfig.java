@@ -29,7 +29,7 @@ public class KafkaConfig {
         config.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, 500);            // 한 번에 가져오는 최대 메시지 수 : 100개 (default 500개)
         config.put(ConsumerConfig.FETCH_MIN_BYTES_CONFIG, 1024);            // 배치 최소 byte 크기 : 1KB (default 1byte)
 //        config.put(ConsumerConfig.FETCH_MAX_BYTES_CONFIG, 1048576);          // 배치 최대 byte 크기 : 1MB (default: 50MB)
-        config.put(ConsumerConfig.FETCH_MAX_WAIT_MS_CONFIG, 1000);          // 배치 데이터가 차길 기다리는 최대 대기시간 : 1초 (default : 500ms)
+        config.put(ConsumerConfig.FETCH_MAX_WAIT_MS_CONFIG, 500);          // 배치 데이터가 차길 기다리는 최대 대기시간 : 1초 (default : 500ms)
 
         return new DefaultKafkaConsumerFactory<>(config);
     }
@@ -39,7 +39,7 @@ public class KafkaConfig {
         ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory());
         factory.setBatchListener(true);
-        factory.getContainerProperties().setIdleBetweenPolls(2000);
+        factory.getContainerProperties().setIdleBetweenPolls(1000);
 
         return factory;
     }
