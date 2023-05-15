@@ -23,7 +23,7 @@ public class SensorHandler extends AbstractHandler {
 
 	protected void channelRead0(String msg) {
 		Map<String, String> receiveData = parseData(msg);
-//		log.info("Parse Sensor : {} {} {} {}", receiveData.get("dataServer"), receiveData.get("dataType"), receiveData.get("dataValue"), receiveData.get("dataTime"));
+//		log.info("Parse Sensor : {} {} {} {}", receiveData.gets("dataServer"), receiveData.get("dataType"), receiveData.get("dataValue"), receiveData.get("dataTime"));
 		addTSData(receiveData.get("dataServer"), receiveData.get("dataType"), receiveData.get("dataValue"), receiveData.get("dataTime"));
 	}
 
