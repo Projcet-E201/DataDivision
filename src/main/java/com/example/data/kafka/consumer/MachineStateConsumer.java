@@ -1,6 +1,7 @@
 package com.example.data.kafka.consumer;
 
 import com.example.data.kafka.data.MachineStateHandler;
+import com.example.data.sse.SseService;
 import com.influxdb.client.WriteApi;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -14,8 +15,8 @@ import java.util.List;
 @Component
 public class MachineStateConsumer extends MachineStateHandler {
 
-    public MachineStateConsumer(WriteApi writeApi) {
-        super(writeApi);
+    public MachineStateConsumer(WriteApi writeApi, SseService sseService) {
+        super(writeApi, sseService);
     }
 
     @KafkaListener(
