@@ -7,7 +7,7 @@ spring:
   #    url: jdbc:mysql://mysql_container:3306/data?useUnicode=true&characterEncoding=UTF-8&characterSetResults=UTF-8&serverTimezone=Asia/Seoul
 
   influxdb:
-    url: http://52.79.42.131:8086
+    url: http://43.201.62.187:8086
     #    retention-policy: autogen # 데이터를 얼마나 오래 보관할지
     #    consistency: ONE # 데이터를 쓰거나 읽을 때 몇개의 노드에서 확인할지
     #    enable-gzip: true # 데이터 전송을 압축할 것인지
