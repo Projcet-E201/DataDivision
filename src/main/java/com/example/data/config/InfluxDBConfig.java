@@ -1,4 +1,4 @@
-package com.example.data.domain.influxdb.config;
+package com.example.data.config;
 
 import com.influxdb.client.InfluxDBClient;
 import com.influxdb.client.InfluxDBClientFactory;

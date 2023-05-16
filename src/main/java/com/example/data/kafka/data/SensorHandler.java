@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import com.example.data.kafka.data.global.AbstractHandler;
+import com.example.data.sse.SseService;
 import com.influxdb.client.WriteApi;
 import com.influxdb.client.domain.WritePrecision;
 import com.influxdb.client.write.Point;
@@ -20,6 +21,8 @@ public class SensorHandler extends AbstractHandler {
 	private final List<Point> points = new ArrayList<>();
 
 	private final WriteApi writeApi;
+
+	private final SseService sseService;
 
 	protected void channelRead0(String msg) {
 		Map<String, String> receiveData = parseData(msg);
@@ -50,6 +53,7 @@ public class SensorHandler extends AbstractHandler {
 		} catch (NumberFormatException e) {
 			log.error("Failed to parse value {} as a Long. Exception message: {}", value, e.getMessage());
 			writeApi.close();
+			sseService.sendError(type + "에 데이터가 저장되고 있지 않습니다.");
 			// 예외 처리 로직 추가
 		} catch (Exception e) {
 			log.error("Unexpected error occurred while adding TS data. Exception message: {}", e.getMessage());
