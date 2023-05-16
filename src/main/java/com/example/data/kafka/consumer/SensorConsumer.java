@@ -1,6 +1,7 @@
 package com.example.data.kafka.consumer;
 
 import com.example.data.kafka.data.SensorHandler;
+import com.example.data.sse.SseService;
 import com.influxdb.client.InfluxDBClient;
 import com.influxdb.client.WriteApi;
 import lombok.extern.slf4j.Slf4j;
@@ -11,9 +12,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class SensorConsumer extends SensorHandler {
 
-
-    public SensorConsumer(WriteApi writeApi) {
-        super(writeApi);
+    public SensorConsumer(WriteApi writeApi, SseService sseService) {
+        super(writeApi, sseService);
     }
 
     @KafkaListener(topics="CLIENT1", groupId = "CONSUMER-GROUP-1", concurrency = "3")
