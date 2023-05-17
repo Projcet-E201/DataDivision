@@ -3,6 +3,7 @@ package com.example.data.kafka.consumer.global;
 import com.example.data.sse.SseService;
 import com.example.data.util.DataInfo;
 import com.example.data.util.DataSet;
+import com.influxdb.client.InfluxDBClient;
 import com.influxdb.client.WriteApi;
 import com.influxdb.client.domain.WritePrecision;
 import com.influxdb.client.write.Point;
@@ -10,10 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.*;
 
 @Slf4j
@@ -21,7 +19,9 @@ import java.util.concurrent.*;
 public abstract class AbstractHandler {
 
 	protected final ConcurrentMap<String, ConcurrentLinkedQueue<DataSet>> dataQueueMap = new ConcurrentHashMap<>();
-	protected final ScheduledExecutorService dataDivisionScheduler = Executors.newScheduledThreadPool(2);
+	protected final ScheduledExecutorService dataDivisionScheduler = Executors.newScheduledThreadPool(1);
+	protected final Random random = new Random();
+
 	protected Map<String, StringBuilder> dataMap = new ConcurrentHashMap<>();
 	protected final List<Point> points = new ArrayList<>();
 
@@ -54,7 +54,7 @@ public abstract class AbstractHandler {
 		return dataMap;
 	}
 
-	protected void addTSData(String server, String type, String value, String time) {
+	protected void 	addTSData(String server, String type, String value, String time) {
 		try {
 			float fieldValue = Float.parseFloat(value);
 			String dataType = type.replaceAll("[0-9]", "");

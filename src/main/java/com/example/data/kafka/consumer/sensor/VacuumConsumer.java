@@ -5,19 +5,21 @@ import com.example.data.sse.SseService;
 import com.example.data.util.DataInfo;
 import com.example.data.util.DataSet;
 import com.influxdb.client.WriteApi;
-import com.influxdb.client.domain.WritePrecision;
-import com.influxdb.client.write.Point;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
-import java.time.Instant;
-import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+/**
+ * 생성 주기 : 5ms
+ * 센서 수 : 30
+ * 가공 여부 : 10초마다 max 값 추출
+ * => 1sec 당 72,000개 데이터
+ * */
 @Slf4j
-@Component
+//@Component
 public class VacuumConsumer extends AbstractHandler {
 
     public VacuumConsumer(WriteApi writeApi, SseService sseService) {

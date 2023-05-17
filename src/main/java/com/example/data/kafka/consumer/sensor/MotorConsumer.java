@@ -5,17 +5,26 @@ import com.example.data.sse.SseService;
 import com.example.data.util.DataInfo;
 import com.example.data.util.DataSet;
 import com.influxdb.client.WriteApi;
-import com.influxdb.client.domain.WritePrecision;
-import com.influxdb.client.write.Point;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
-import java.time.Instant;
-import java.util.ArrayList;
+import javax.annotation.PostConstruct;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
-import java.util.concurrent.*;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
+/**
+ * 생성 주기 : 5ms
+ * 센서 수 : 10
+ * 가공 여부 : 5초마다 max 값 추출
+ * => 1sec 당 24,000개 데이터
+ * */
 @Slf4j
 @Component
 public class MotorConsumer extends AbstractHandler {
@@ -24,35 +33,44 @@ public class MotorConsumer extends AbstractHandler {
         super(writeApi, sseService);
     }
 
-    @KafkaListener(topics="MOTOR", groupId = "MOTOR-CONSUMER-GROUP", concurrency = "3")
-    public void consumeMotor(String message) {
-        Map<String, String> receiveData = parseData(message);
+    @KafkaListener(topics="MOTOR", groupId = "MOTOR-CONSUMER-GROUP", containerFactory = "containerFactory", concurrency = "3")
+    public void consumeMotor(ConsumerRecords<String, String> records) {
+        for (ConsumerRecord<String, String> record : records) {
+            Map<String, String> receiveData = parseData(record.value());
 
-        // Client1 + Motor1,...,10 => 키값
-        String key = receiveData.get("dataServer") + "_" + receiveData.get("dataType");
+            // Client1 + Motor1,...,10 => 키값
+            String key = receiveData.get("dataServer") + "_" + receiveData.get("dataType");
 
-        // 큐 -> 값을 저장, 없으면 키값을 생성하고 값을 저장
-        DataSet dataSet = new DataSet(receiveData.get("dataValue"), receiveData.get("dataTime"));
-        dataQueueMap.computeIfAbsent(key, k -> new ConcurrentLinkedQueue<>()).add(dataSet);
+            // 큐 -> 값을 저장, 없으면 키값을 생성하고 값을 저장
+            DataSet dataSet = new DataSet(receiveData.get("dataValue"), receiveData.get("dataTime"));
+            dataQueueMap.computeIfAbsent(key, k -> new ConcurrentLinkedQueue<>()).add(dataSet);
+        }
+    }
 
+    @PostConstruct
+    private void saveScheduler() {
         // 스케쥴러 키값에서 타입별로 스케쥴러
         dataDivisionScheduler.scheduleAtFixedRate(() -> {
-            DataSet data = new DataSet("0", "0");
 
             for (Map.Entry<String, ConcurrentLinkedQueue<DataSet>> entry : dataQueueMap.entrySet()) {
+                DataSet valueAndTime = new DataSet("0", "0");
+
                 // 가공
-                String[] split = entry.getKey().split("_");
-                ConcurrentLinkedQueue<DataSet> value1 = entry.getValue();
-                while (!value1.isEmpty()){
-                    data = value1.poll();
+                String[] nameAndType = entry.getKey().split("_");
+                ConcurrentLinkedQueue<DataSet> motorQueue = entry.getValue();
+
+                while (!motorQueue.isEmpty()){
+                    valueAndTime = motorQueue.poll();
                 }
 
                 // 저장
-                addTSData(split[0], split[1], data.getValue(), data.getTime());
-
-                value1.clear();
+                if(!valueAndTime.getTime().equals("0")) {   // 빈값 제거
+                    String absValue = Math.abs(Integer.parseInt(valueAndTime.getValue())) + "";
+                    log.info(entry.getKey() + " " + nameAndType[0] + " " + nameAndType[1] +  " " + absValue + " " + valueAndTime.getTime());
+                    addTSData(nameAndType[0], nameAndType[1], absValue, valueAndTime.getTime());
+                }
             }
-            
+
         }, DataInfo.MOTOR_CALCULATE_TIME, DataInfo.MOTOR_CALCULATE_TIME, DataInfo.MOTOR_CALCULATE_TIME_UNIT);
     }
 }

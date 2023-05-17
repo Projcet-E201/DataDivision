@@ -13,6 +13,11 @@ import java.util.Base64;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * 생성 주기 : 1H
+ * 데이터 수 : 1
+ * 가공 여부 : X
+ * */
 @Slf4j
 //@Component
 public class ImageConsumer extends AbstractHandler {

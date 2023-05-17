@@ -15,6 +15,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.Base64;
 import java.util.Map;
 
+/**
+ * 생성 주기 : 1m
+ * 데이터 수 : 1
+ * 가공 여부 : X
+ * */
 @Slf4j
 //@Component
 public class AnalogConsumer extends AbstractHandler {

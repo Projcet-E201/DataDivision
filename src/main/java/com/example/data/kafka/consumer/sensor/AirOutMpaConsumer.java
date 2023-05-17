@@ -5,19 +5,21 @@ import com.example.data.sse.SseService;
 import com.example.data.util.DataInfo;
 import com.example.data.util.DataSet;
 import com.influxdb.client.WriteApi;
-import com.influxdb.client.domain.WritePrecision;
-import com.influxdb.client.write.Point;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
-import java.time.Instant;
-import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+/**
+ * 생성 주기 : 1sec
+ * 센서 수 : 5
+ * 가공 여부 : 10초마다 max 값 추출
+ * => 1sec 당 60개 데이터
+ * */
 @Slf4j
-@Component
+//@Component
 public class AirOutMpaConsumer extends AbstractHandler {
 
     public AirOutMpaConsumer(WriteApi writeApi, SseService sseService) {

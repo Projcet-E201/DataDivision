@@ -2,17 +2,18 @@ package com.example.data.kafka.consumer;
 
 import com.example.data.kafka.consumer.global.AbstractHandler;
 import com.example.data.sse.SseService;
-import com.example.data.util.DataInfo;
 import com.influxdb.client.WriteApi;
-import com.influxdb.client.domain.WritePrecision;
-import com.influxdb.client.write.Point;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 
-import java.time.Instant;
-import java.util.ArrayList;
 import java.util.Map;
 
+/**
+ * 생성 주기 : Boolean 70s / Double 50s / Int 40s / String 100s
+ * 데이터 수 : 10
+ * 가공 여부 : X
+ * => 1sec 당 0.70 + 0.50 + 0.40 + 0.01개 데이터
+ * */
 @Slf4j
 //@Component
 public class MachineStateConsumer extends AbstractHandler {
