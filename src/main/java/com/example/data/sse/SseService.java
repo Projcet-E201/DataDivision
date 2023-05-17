@@ -26,6 +26,21 @@ public class SseService {
         return emitter;
     }
 
+    public void sendError(String errorMessage) {
+        sendEvent(this.errorEmitters, errorMessage);
+    }
+
+    private void sendEvent(List<SseEmitter> emitters, String message) {
+        List<SseEmitter> deadEmitters = new ArrayList<>();
+        emitters.forEach(emitter -> {
+            try {
+                emitter.send(message);
+            } catch (IOException e) {
+                deadEmitters.add(emitter);
+            }
+        });
+        emitters.removeAll(deadEmitters);
+    }
 
     public SseEmitter subscribeToInfo(@PathVariable String variable_num) {
         SseEmitter emitter = new SseEmitter();
@@ -40,22 +55,6 @@ public class SseService {
         return emitter;
     }
 
-    public void sendError(String errorMessage) {
-        sendEvent(this.errorEmitters, errorMessage);
-    }
-
-
-    private void sendEvent(List<SseEmitter> emitters, String message) {
-        List<SseEmitter> deadEmitters = new ArrayList<>();
-        emitters.forEach(emitter -> {
-            try {
-                emitter.send(message);
-            } catch (IOException e) {
-                deadEmitters.add(emitter);
-            }
-        });
-        emitters.removeAll(deadEmitters);
-    }
     private void sendInfoEvent(List<SseEmitter> emitters, List<Map<String, Object>> message) {
         List<SseEmitter> deadEmitters = new ArrayList<>();
         emitters.forEach(emitter -> {

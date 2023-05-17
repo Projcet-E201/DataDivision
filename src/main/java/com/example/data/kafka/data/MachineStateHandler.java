@@ -2,12 +2,14 @@ package com.example.data.kafka.data;
 
 import com.example.data.kafka.data.global.AbstractHandler;
 import com.example.data.sse.SseService;
-import com.example.data.util.StateValue;
 import com.influxdb.client.WriteApi;
+import com.influxdb.client.domain.WritePrecision;
 import com.influxdb.client.write.Point;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -33,24 +35,51 @@ public class MachineStateHandler extends AbstractHandler {
         LocalDateTime currentTime = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd/HH:mm:ss");
         String formattedDateTime = currentTime.format(formatter);
-//        log.info("generate time : {}, receive time : {} ", receiveData.get("dataTime"), formattedDateTime);
+        log.info("generate time : {}, receive time : {} ", receiveData.get("dataTime"), formattedDateTime);
 
         addTSData(receiveData.get("dataServer"), receiveData.get("dataType"), receiveData.get("dataValue"), receiveData.get("dataTime"));
     }
 
-    private void addTSData(String server, String type, String dataValue, String time) {
-        String[] parts = dataValue.split(":");
-        String name = parts[0];
+    private void addTSData(String server, String type, String value, String time) {
+        long startTime = System.currentTimeMillis();
 
-        // 서버 이름으로 클라이언트 객체를 가져옴
-        String key_value = server + "_" + name;
-        if (name.startsWith("string")) {
-            StateValue.state_value.put(key_value, parts[1] + " " + time);
-        } else {
-            double value = Double.parseDouble(parts[1]);
-            StateValue.state_value.put(key_value, value);
+        String[] result = value.split(":");
+        String bigName = type.replaceAll("[0-9]", "");
+        try {
+            Point row = Point
+                .measurement(server)
+                .addTag("big_name", bigName)
+                .addTag("name", result[0])
+                .addTag("generate_time", time)
+                .time(Instant.now(), WritePrecision.NS);
+
+            if (result[0].startsWith("string")) {
+                row.addField("value_str", result[1]);
+            } else if (result[0].startsWith("double")) {
+                row.addField("value_double", Double.parseDouble(result[1]));
+            } else {
+                row.addField("value", Integer.parseInt(result[1]));
+            }
+
+
+            points.add(row);
+            sseService.sendError(result[0] + "에 데이터가 저장되고 있습니다.");
+            if (points.size() >= BATCH_SIZE) {
+                writeApi.writePoints("day", "semse", new ArrayList<>(points));
+                points.clear();
+                log.info(server);
+            }
+
+        } catch (NumberFormatException e) {
+            log.error("Machine State Failed to parse value {} as a Long. Exception message: {} {}", result[0], result[1], e.getMessage());
+            writeApi.close();
+            sseService.sendError(result[0] + "에 데이터가 저장되고 있지 않습니다.");
+        } catch (Exception e) {
+            log.error("Machine State Unexpected error occurred while adding TS data. Exception message: {}", e.getMessage());
+            writeApi.close();
+            // 예외 처리 로직 추가
         }
+        long endTime = System.currentTimeMillis();
+        log.info("{} {}, DB 저장 : {} ms", server, type, endTime - startTime);
     }
-
-
 }
