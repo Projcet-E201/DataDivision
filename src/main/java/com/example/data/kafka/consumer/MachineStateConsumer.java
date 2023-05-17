@@ -21,6 +21,7 @@ public class MachineStateConsumer extends MachineStateHandler {
             containerFactory = "containerFactory",
             concurrency = "4")
     public void consume(String message) {
+//        System.out.println("message = " + message);
         channelRead0(message);
     }
 

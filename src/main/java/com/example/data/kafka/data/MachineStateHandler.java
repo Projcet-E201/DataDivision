@@ -63,7 +63,7 @@ public class MachineStateHandler extends AbstractHandler {
 
 
             points.add(row);
-            sseService.sendError(result[0] + "에 데이터가 저장되고 있습니다.");
+            sseService.sendError("[" + time + "]" + server + "> " + bigName + ">" + result[0] + "에 데이터가 저장되고 있습니다.");
             if (points.size() >= BATCH_SIZE) {
                 writeApi.writePoints("day", "semse", new ArrayList<>(points));
                 points.clear();
@@ -73,10 +73,11 @@ public class MachineStateHandler extends AbstractHandler {
         } catch (NumberFormatException e) {
             log.error("Machine State Failed to parse value {} as a Long. Exception message: {} {}", result[0], result[1], e.getMessage());
             writeApi.close();
-            sseService.sendError(result[0] + "에 데이터가 저장되고 있지 않습니다.");
+            sseService.sendError("[" + time + "]" + server + "> " + bigName + ">" + result[0] + "에 데이터가 저장되고 있지 않습니다.");
         } catch (Exception e) {
             log.error("Machine State Unexpected error occurred while adding TS data. Exception message: {}", e.getMessage());
             writeApi.close();
+            sseService.sendError("[" + time + "]" + server + "> " + bigName + ">" + result[0] + "에 데이터가 저장되고 있지 않습니다.");
             // 예외 처리 로직 추가
         }
         long endTime = System.currentTimeMillis();
