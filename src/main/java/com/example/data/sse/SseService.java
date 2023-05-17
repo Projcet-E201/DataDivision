@@ -67,18 +67,18 @@ public class SseService {
         });
         emitters.removeAll(deadEmitters);
     }
-    @Scheduled(fixedRate = 10000)
-    public void sendDataUpdates() {
-        for (Map.Entry<String, List<SseEmitter>> entry : infoEmitters.entrySet()) {
-            String variable_num = entry.getKey();
-            System.out.println("####################################################variable_num = " + variable_num);
-            List<SseEmitter> emitters = entry.getValue();
-
-            List<Map<String, Object>> data = generateData(variable_num); // 데이터를 생성하는 로직
-
-            sendInfoEvent(emitters, data);
-        }
-    }
+//    @Scheduled(fixedRate = 10000)
+//    public void sendDataUpdates() {
+//        for (Map.Entry<String, List<SseEmitter>> entry : infoEmitters.entrySet()) {
+//            String variable_num = entry.getKey();
+//            System.out.println("####################################################variable_num = " + variable_num);
+//            List<SseEmitter> emitters = entry.getValue();
+//
+//            List<Map<String, Object>> data = generateData(variable_num); // 데이터를 생성하는 로직
+//
+//            sendInfoEvent(emitters, data);
+//        }
+//    }
 
     private List<Map<String, Object>> generateData(String client_num) {
         String client = "CLIENT" + client_num;
