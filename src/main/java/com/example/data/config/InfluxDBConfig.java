@@ -1,15 +1,15 @@
 package com.example.data.config;
 
-import com.influxdb.client.InfluxDBClient;
-import com.influxdb.client.InfluxDBClientFactory;
-import com.influxdb.client.WriteApi;
-import com.influxdb.client.WriteOptions;
+import com.influxdb.client.*;
 import com.influxdb.client.write.events.BackpressureEvent;
+import okhttp3.ConnectionPool;
+import okhttp3.OkHttpClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.PreDestroy;
+import java.util.concurrent.TimeUnit;
 
 
 @Configuration
@@ -31,7 +31,19 @@ public class InfluxDBConfig {
 
     @Bean
     public InfluxDBClient influxDBClient() {
-        return InfluxDBClientFactory.create(url, token.toCharArray());
+        OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder()
+                .connectTimeout(40, TimeUnit.SECONDS)
+                .readTimeout(40, TimeUnit.SECONDS)
+                .writeTimeout(40, TimeUnit.SECONDS)
+                .connectionPool(new ConnectionPool(10, 5, TimeUnit.MINUTES)); // Connection Pool 설정
+
+        InfluxDBClientOptions options = InfluxDBClientOptions.builder()
+                .url(url)
+                .authenticateToken(token.toCharArray())
+                .okHttpClient(okHttpClientBuilder)
+                .build();
+
+        return InfluxDBClientFactory.create(options);
     }
 
     @Bean

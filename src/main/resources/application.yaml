@@ -31,3 +31,7 @@ management:
     web:
       exposure:
         include: "*"  # *으로 표기하면 전체
+  metrics:
+    export:
+      prometheus:
+        enabled: true
