@@ -43,7 +43,6 @@ public class SensorHandler extends AbstractHandler {
 				.time(Instant.now(), WritePrecision.NS);
 
 			points.add(row);
-			sseService.sendError("[" + time + "]" + server + "> " + type + ">" + dataType +" 데이터가 저장되고 있습니다.");
 			if (points.size() >= BATCH_SIZE) {
 				writeApi.writePoints("week", "semse", new ArrayList<>(points));
 				points.clear();
