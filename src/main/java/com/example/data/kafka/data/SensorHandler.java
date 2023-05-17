@@ -43,7 +43,7 @@ public class SensorHandler extends AbstractHandler {
 				.time(Instant.now(), WritePrecision.NS);
 
 			points.add(row);
-			sseService.sendError(type + "에 데이터가 저장되고 있습니다.");
+			sseService.sendError("[" + time + "]" + server + "> " + type + ">" + dataType +" 데이터가 저장되고 있습니다.");
 			if (points.size() >= BATCH_SIZE) {
 				writeApi.writePoints("week", "semse", new ArrayList<>(points));
 				points.clear();
@@ -53,11 +53,12 @@ public class SensorHandler extends AbstractHandler {
 		} catch (NumberFormatException e) {
 			log.error("Failed to parse value {} as a Long. Exception message: {}", value, e.getMessage());
 			writeApi.close();
-			sseService.sendError(type + "에 데이터가 저장되고 있지 않습니다.");
+			sseService.sendError("[" + time + "]" + server + "> " + type + "> 데이터가 저장되고 있지 않습니다.");
 			// 예외 처리 로직 추가
 		} catch (Exception e) {
 			log.error("Unexpected error occurred while adding TS data. Exception message: {}", e.getMessage());
 			writeApi.close();
+			sseService.sendError("[" + time + "]" + server + "> " + type + "> 데이터가 저장되고 있지 않습니다.");
 			// 예외 처리 로직 추가
 		}
 	}
