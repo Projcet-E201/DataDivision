@@ -49,8 +49,8 @@ public class InfluxDBConfig {
     @Bean
     public WriteApi writeApi(InfluxDBClient influxDBClient) {
         WriteOptions options = WriteOptions.builder()
-                .batchSize(10_000) // 한번에 보내는 데이터 량 (기본 1000)
-                .bufferLimit(1_000_000)
+                .batchSize(1_000) // 한번에 보내는 데이터 량 (기본 1000)
+                .bufferLimit(100_000)
                 .flushInterval(1)
                 .build();
 
