@@ -29,6 +29,6 @@ public class MachineStateConsumer extends AbstractHandler {
             concurrency = "4")
     public void consume(String message) {
         Map<String, String> receiveData = parseData(message);
-        addTSData(receiveData.get("dataServer"), receiveData.get("dataType"), receiveData.get("dataValue"), receiveData.get("dataTime"));
+        machineDivision(receiveData.get("dataServer"), receiveData.get("dataType"), receiveData.get("dataValue"), receiveData.get("dataTime"));
     }
 }

@@ -3,6 +3,7 @@ package com.example.data.kafka.consumer.global;
 import com.example.data.sse.SseService;
 import com.example.data.util.DataInfo;
 import com.example.data.util.DataSet;
+import com.example.data.util.StateValue;
 import com.influxdb.client.InfluxDBClient;
 import com.influxdb.client.WriteApi;
 import com.influxdb.client.domain.WritePrecision;
@@ -20,7 +21,6 @@ public abstract class AbstractHandler {
 
 	protected final ConcurrentMap<String, ConcurrentLinkedQueue<DataSet>> dataQueueMap = new ConcurrentHashMap<>();
 	protected final ScheduledExecutorService dataDivisionScheduler = Executors.newScheduledThreadPool(1);
-	protected final Random random = new Random();
 
 	protected Map<String, StringBuilder> dataMap = new ConcurrentHashMap<>();
 	protected final List<Point> points = new ArrayList<>();
@@ -77,12 +77,27 @@ public abstract class AbstractHandler {
 		} catch (NumberFormatException e) {
 			log.error("Failed to parse value {} as a Long. Exception message: {}", value, e.getMessage());
 			writeApi.close();
-			sseService.sendError(type + "에 데이터가 저장되고 있지 않습니다.");
+			sseService.sendError("[" + time + "]" + server + "> " + type + "> 데이터가 저장되고 있지 않습니다.");
 			// 예외 처리 로직 추가
 		} catch (Exception e) {
 			log.error("Unexpected error occurred while adding TS data. Exception message: {}", e.getMessage());
 			writeApi.close();
+			sseService.sendError("[" + time + "]" + server + "> " + type + "> 데이터가 저장되고 있지 않습니다.");
 			// 예외 처리 로직 추가
+		}
+	}
+
+	protected void machineDivision(String server, String type, String dataValue, String time) {
+		String[] parts = dataValue.split(":");
+		String name = parts[0];
+
+		// 서버 이름으로 클라이언트 객체를 가져옴
+		String key_value = server + "_" + name;
+		if (name.startsWith("string")) {
+			StateValue.state_value.put(key_value, parts[1] + " " + time);
+		} else {
+			double value = Double.parseDouble(parts[1]);
+			StateValue.state_value.put(key_value, value);
 		}
 	}
 }

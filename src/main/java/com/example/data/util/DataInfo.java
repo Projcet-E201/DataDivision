@@ -15,17 +15,17 @@ public class DataInfo {
 
 	// Vacuum 정보
 	public static final int VACUUM_COUNT = 30;
-	public static final int VACUUM_CALCULATE_TIME = 10*10;
+	public static final int VACUUM_CALCULATE_TIME = 10;
 	public static final TimeUnit VACUUM_CALCULATE_TIME_UNIT = TimeUnit.SECONDS;
 
 	// AirOutKpaConsumer 정보
 	public static final int AIR_OUT_KPA_COUNT = 5;
-	public static final int AIR_OUT_KPA_CALCULATE_TIME = 30*10;
+	public static final int AIR_OUT_KPA_CALCULATE_TIME = 30;
 	public static final TimeUnit AIR_OUT_KPA_CALCULATE_TIME_UNIT = TimeUnit.SECONDS;
 
 	// AirOutMpaConsumer 정보
 	public static final int AIR_OUT_MPA_COUNT = 5;
-	public static final int AIR_OUT_MPA_CALCULATE_TIME = 10*10;
+	public static final int AIR_OUT_MPA_CALCULATE_TIME = 10;
 	public static final TimeUnit AIR_OUT_MPA_CALCULATE_TIME_UNIT = TimeUnit.SECONDS;
 
 	// AirInKpaConsumer 정보
