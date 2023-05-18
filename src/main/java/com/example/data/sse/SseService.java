@@ -109,7 +109,8 @@ public class SseService {
                 } else {
                     Object value = StateValue.state_value.get(search_value);
                     if (value != null) {
-                        recordMap.put(search_value, value);
+                        String[] splitValue = search_value.split("_");
+                        recordMap.put(splitValue[1], value);
                     }
                 }
             }
