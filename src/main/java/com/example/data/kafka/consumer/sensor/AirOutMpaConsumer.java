@@ -67,6 +67,6 @@ public class AirOutMpaConsumer extends AbstractHandler {
                 }
             }
 
-        }, DataInfo.AIR_OUT_MPA_COUNT, DataInfo.AIR_OUT_MPA_CALCULATE_TIME, DataInfo.AIR_OUT_MPA_CALCULATE_TIME_UNIT);
+        }, DataInfo.AIR_OUT_MPA_CALCULATE_TIME, DataInfo.AIR_OUT_MPA_CALCULATE_TIME, DataInfo.AIR_OUT_MPA_CALCULATE_TIME_UNIT);
     }
 }
