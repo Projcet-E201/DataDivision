@@ -1,6 +1,7 @@
 package com.example.data.sse;
 
 import com.example.data.util.StateValue;
+import com.google.gson.Gson;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -60,7 +61,9 @@ public class SseService {
         List<SseEmitter> deadEmitters = new ArrayList<>();
         emitters.forEach(emitter -> {
             try {
-                emitter.send(message);
+                Gson gson = new Gson();
+                String result = gson.toJson(message);
+                emitter.send(result);
             } catch (IOException e) {
                 deadEmitters.add(emitter);
             }

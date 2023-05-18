@@ -19,13 +19,6 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class MachineStateHandler extends AbstractHandler {
 
-    private static final int BATCH_SIZE = 5;
-    private final List<Point> points = new ArrayList<>();
-
-    private final WriteApi writeApi;
-
-    private final SseService sseService;
-
     protected void channelRead0(String msg) {
         Map<String, String> receiveData = parseData(msg);
 //        log.info("Parse MachineState : {} {} {}", receiveData.get("dataServer"), receiveData.get("dataType"),  receiveData.get("dataTime"));
