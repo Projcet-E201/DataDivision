@@ -21,7 +21,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class MachineStateHandler extends AbstractHandler {
 
-    private static final int BATCH_SIZE = 5;
+    private static final int BATCH_SIZE = 30;
     private final List<Point> points = new ArrayList<>();
 
     private final WriteApi writeApi;
