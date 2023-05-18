@@ -4,7 +4,7 @@ import java.util.concurrent.TimeUnit;
 
 public class DataInfo {
 
-	private static final int DUPLICATE = 1;
+	private static final int DUPLICATE = 2;
 	private static final int CLIENT_COUNT = 11;
 
 	// Motor 정보
