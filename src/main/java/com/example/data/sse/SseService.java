@@ -104,7 +104,8 @@ public class SseService {
                         String[] parts = value.split(" ");
                         valuesMap.put("time", parts[1]);
                         valuesMap.put("value", parts[0]);
-                        recordMap.put(search_value, valuesMap);
+                        String[] splitValue = search_value.split("_");
+                        recordMap.put(splitValue[1], valuesMap);
                     }
                 } else {
                     Object value = StateValue.state_value.get(search_value);
