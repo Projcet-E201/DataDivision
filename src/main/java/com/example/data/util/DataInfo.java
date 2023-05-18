@@ -4,58 +4,61 @@ import java.util.concurrent.TimeUnit;
 
 public class DataInfo {
 
+	private static final int DUPLICATE = 20;
+	private static final int CLIENT_COUNT = 11;
+
 	// Motor 정보
 	public static final int MOTOR_COUNT = 10;
-	public static final int MOTOR_BATCH_SIZE = 120;
-	public static final int MOTOR_CALCULATE_TIME = 5;
+	public static final int MOTOR_BATCH_SIZE = CLIENT_COUNT * MOTOR_COUNT;
+	public static final int MOTOR_CALCULATE_TIME = DUPLICATE * 5;
 	public static final TimeUnit MOTOR_CALCULATE_TIME_UNIT = TimeUnit.SECONDS;
 
 	// Vacuum 정보
 	public static final int VACUUM_COUNT = 30;
-	public static final int VACUUM_BATCH_SIZE = 720;
-	public static final int VACUUM_CALCULATE_TIME = 10;
+	public static final int VACUUM_BATCH_SIZE = CLIENT_COUNT * VACUUM_COUNT;
+	public static final int VACUUM_CALCULATE_TIME = DUPLICATE * 10;
 	public static final TimeUnit VACUUM_CALCULATE_TIME_UNIT = TimeUnit.SECONDS;
 
 	// AirOutKpaConsumer 정보
 	public static final int AIR_OUT_KPA_COUNT = 5;
-	public static final int AIR_OUT_KPA_BATCH_SIZE = 60;
-	public static final int AIR_OUT_KPA_CALCULATE_TIME = 30;
+	public static final int AIR_OUT_KPA_BATCH_SIZE = CLIENT_COUNT * AIR_OUT_KPA_COUNT;
+	public static final int AIR_OUT_KPA_CALCULATE_TIME = DUPLICATE * 30;
 	public static final TimeUnit AIR_OUT_KPA_CALCULATE_TIME_UNIT = TimeUnit.SECONDS;
 
 	// AirOutMpaConsumer 정보
 	public static final int AIR_OUT_MPA_COUNT = 5;
-	public static final int AIR_OUT_MPA_BATCH_SIZE = 60;
-	public static final int AIR_OUT_MPA_CALCULATE_TIME = 10;
+	public static final int AIR_OUT_MPA_BATCH_SIZE = CLIENT_COUNT * AIR_OUT_MPA_COUNT;
+	public static final int AIR_OUT_MPA_CALCULATE_TIME = DUPLICATE * 10;
 	public static final TimeUnit AIR_OUT_MPA_CALCULATE_TIME_UNIT = TimeUnit.SECONDS;
 
 	// AirInKpaConsumer 정보
 	public static final int AIR_IN_KPA_COUNT = 10;
-	public static final int AIR_IN_KPA_BATCH_SIZE = 1200;
-	public static final int AIR_IN_KPA_CALCULATE_TIME = 1;
+	public static final int AIR_IN_KPA_BATCH_SIZE = CLIENT_COUNT * AIR_IN_KPA_COUNT;
+	public static final int AIR_IN_KPA_CALCULATE_TIME = DUPLICATE * 1;
 	public static final TimeUnit AIR_IN_KPA_CALCULATE_TIME_UNIT = TimeUnit.SECONDS;
 
 	// Water 정보
 	public static final int WATER_COUNT = 10;
-	public static final int WATER_BATCH_SIZE = 120;
-	public static final int WATER_CALCULATE_TIME = 10;
+	public static final int WATER_BATCH_SIZE = CLIENT_COUNT * WATER_COUNT;
+	public static final int WATER_CALCULATE_TIME = DUPLICATE * 10;
 	public static final TimeUnit WATER_CALCULATE_TIME_UNIT = TimeUnit.SECONDS;
 
 	// AbrasionConsumer (마모량) 정보
 	public static final int ABRASION_COUNT = 5;
-	public static final int ABRASION_BATCH_SIZE = 60;
-	public static final int ABRASION_CALCULATE_TIME = 1;
+	public static final int ABRASION_BATCH_SIZE = CLIENT_COUNT * ABRASION_COUNT;
+	public static final int ABRASION_CALCULATE_TIME = DUPLICATE * 1;
 	public static final TimeUnit ABRASION_CALCULATE_TIME_UNIT = TimeUnit.MINUTES;
 
 	// 부하량 정보
 	public static final int LOAD_COUNT = 5;
-	public static final int LOAD_BATCH_SIZE = 60;
-	public static final int LOAD_CALCULATE_TIME = 1;
+	public static final int LOAD_BATCH_SIZE = CLIENT_COUNT * LOAD_COUNT;
+	public static final int LOAD_CALCULATE_TIME = DUPLICATE * 1;
 	public static final TimeUnit LOAD_CALCULATE_TIME_UNIT = TimeUnit.MINUTES;
 
 	// VelocityConsumer (회전속도) 정보
 	public static final int VELOCITY_COUNT = 5;
-	public static final int VELOCITY_BATCH_SIZE = 60;
-	public static final int VELOCITY_CALCULATE_TIME = 1;
+	public static final int VELOCITY_BATCH_SIZE = CLIENT_COUNT * VELOCITY_COUNT;
+	public static final int VELOCITY_CALCULATE_TIME = DUPLICATE * 1;
 	public static final TimeUnit VELOCITY_CALCULATE_TIME_UNIT = TimeUnit.MINUTES;
 
 
