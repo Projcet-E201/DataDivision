@@ -65,8 +65,27 @@ public abstract class AbstractHandler {
 					.addTag("big_name",dataType)
 					.addField("value", fieldValue)
 					.time(Instant.now(), WritePrecision.NS);
-			points.add(row);
 
+			points.add(row);
+			if (dataType.equals("MOTOR") && fieldValue > 250) {
+				sseService.sendError("[" + time + "]" + server + "_" + dataType + "_" + type + "데이터 경고");
+			} else if (dataType.equals("VACUUM") && fieldValue > 90) {
+				sseService.sendError("[" + time + "]" + server + "_" + dataType + "_" + type + "데이터 경고");
+			} else if (dataType.equals("AIR_IN_KPA") && fieldValue > 800) {
+				sseService.sendError("[" + time + "]" + server + "_" + dataType + "_" + type + "데이터 경고");
+			} else if (dataType.equals("AIR_OUT_KPA") && fieldValue > 800) {
+				sseService.sendError("[" + time + "]" + server + "_" + dataType + "_" + type + "데이터 경고");
+			} else if (dataType.equals("AIR_OUT_MPA") && fieldValue > 0.8) {
+				sseService.sendError("[" + time + "]" + server + "_" + dataType + "_" + type + "데이터 경고");
+			} else if (dataType.equals("WATER") && fieldValue > 3) {
+				sseService.sendError("[" + time + "]" + server + "_" + dataType + "_" + type + "데이터 경고");
+			} else if (dataType.equals("ABRASION") && fieldValue > 35) {
+				sseService.sendError("[" + time + "]" + server + "_" + dataType + "_" + type + "데이터 경고");
+			} else if (dataType.equals("LOAD") && fieldValue > 14) {
+				sseService.sendError("[" + time + "]" + server + "_" + dataType + "_" + type + "데이터 경고");
+			} else if (dataType.equals("VELOCITY") && fieldValue > 45000) {
+				sseService.sendError("[" + time + "]" + server + "_" + dataType + "_" + type + "데이터 경고");
+			}
 			if (points.size() >= batchSize) {
 				writeApi.writePoints("week", "semse", new ArrayList<>(points));
 				points.clear();
