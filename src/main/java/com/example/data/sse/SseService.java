@@ -51,7 +51,7 @@ public class SseService {
         emitters.forEach(emitter -> {
             try {
                 emitter.send(message);
-            } catch (IOException e) {
+            } catch (IOException | IllegalStateException e) {
                 deadEmitters.add(emitter);
             }
         });
