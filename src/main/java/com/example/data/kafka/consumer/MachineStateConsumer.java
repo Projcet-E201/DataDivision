@@ -5,6 +5,7 @@ import com.example.data.sse.SseService;
 import com.influxdb.client.WriteApi;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
@@ -15,7 +16,7 @@ import java.util.Map;
  * => 1sec 당 0.70 + 0.50 + 0.40 + 0.01개 데이터
  * */
 @Slf4j
-//@Component
+@Component
 public class MachineStateConsumer extends AbstractHandler {
 
     public MachineStateConsumer(WriteApi writeApi, SseService sseService) {

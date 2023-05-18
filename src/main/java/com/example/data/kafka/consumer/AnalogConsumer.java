@@ -5,6 +5,7 @@ import com.example.data.sse.SseService;
 import com.influxdb.client.WriteApi;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -21,7 +22,7 @@ import java.util.Map;
  * 가공 여부 : X
  * */
 @Slf4j
-//@Component
+@Component
 public class AnalogConsumer extends AbstractHandler {
 
     private static final String SAVE_PATH = "received_analog";

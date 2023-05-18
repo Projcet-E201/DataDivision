@@ -5,6 +5,7 @@ import com.example.data.sse.SseService;
 import com.influxdb.client.WriteApi;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.stereotype.Component;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -19,7 +20,7 @@ import java.util.UUID;
  * 가공 여부 : X
  * */
 @Slf4j
-//@Component
+@Component
 public class ImageConsumer extends AbstractHandler {
 
     private static final String IMAGE_SAVE_PATH = "received_images";
