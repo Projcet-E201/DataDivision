@@ -35,7 +35,7 @@ public class AirOutMpaConsumer extends AbstractHandler {
             Map<String, String> receiveData = parseData(record.value());
 
             // Client1 + Motor1,...,10 => 키값
-            String key = receiveData.get("dataServer") + "_" + receiveData.get("dataType");
+            String key = receiveData.get("dataServer") + "-" + receiveData.get("dataType");
 
             // 큐 -> 값을 저장, 없으면 키값을 생성하고 값을 저장
             DataSet dataSet = new DataSet(receiveData.get("dataValue"), receiveData.get("dataTime"));
@@ -52,7 +52,7 @@ public class AirOutMpaConsumer extends AbstractHandler {
                 DataSet valueAndTime = new DataSet("0", "0");
 
                 // 가공
-                String[] nameAndType = entry.getKey().split("_");
+                String[] nameAndType = entry.getKey().split("-");
                 ConcurrentLinkedQueue<DataSet> motorQueue = entry.getValue();
 
                 while (!motorQueue.isEmpty()){
