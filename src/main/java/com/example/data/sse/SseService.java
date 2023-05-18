@@ -70,11 +70,10 @@ public class SseService {
         });
         emitters.removeAll(deadEmitters);
     }
-    @Scheduled(fixedRate = 10000)
+    @Scheduled(fixedRate = 1000)
     public void sendDataUpdates() {
         for (Map.Entry<String, List<SseEmitter>> entry : infoEmitters.entrySet()) {
             String variable_num = entry.getKey();
-            System.out.println("####################################################variable_num = " + variable_num);
             List<SseEmitter> emitters = entry.getValue();
 
             List<Map<String, Object>> data = generateData(variable_num); // 데이터를 생성하는 로직
