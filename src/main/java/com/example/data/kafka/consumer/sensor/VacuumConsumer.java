@@ -22,14 +22,14 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * => 1sec 당 72,000개 데이터
  * */
 @Slf4j
-//@Component
+@Component
 public class VacuumConsumer extends AbstractHandler {
 
     public VacuumConsumer(WriteApi writeApi, SseService sseService) {
         super(writeApi, sseService);
     }
 
-    @KafkaListener(topics="VACUUM", groupId = "VACUUM-CONSUMER-GROUP", concurrency = "3")
+    @KafkaListener(topics="VACUUM", groupId = "VACUUM-CONSUMER-GROUP", concurrency = "8")
     public void consumeMotor(ConsumerRecords<String, String> records) {
         for (ConsumerRecord<String, String> record : records) {
             Map<String, String> receiveData = parseData(record.value());
@@ -63,7 +63,7 @@ public class VacuumConsumer extends AbstractHandler {
                 if(!valueAndTime.getTime().equals("0")) {   // 빈값 제거
                     String absValue = Math.abs(Integer.parseInt(valueAndTime.getValue())) + "";
                     log.info(entry.getKey() + " " + nameAndType[0] + " " + nameAndType[1] +  " " + absValue + " " + valueAndTime.getTime());
-                    addTSData(nameAndType[0], nameAndType[1], absValue, valueAndTime.getTime());
+                    addTSData(nameAndType[0], nameAndType[1], absValue, valueAndTime.getTime(), DataInfo.VACUUM_BATCH_SIZE);
                 }
             }
 

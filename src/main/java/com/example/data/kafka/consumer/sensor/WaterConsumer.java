@@ -22,7 +22,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * => 1sec 당 120개 데이터
  * */
 @Slf4j
-//@Component
+@Component
 public class WaterConsumer extends AbstractHandler {
 
     public WaterConsumer(WriteApi writeApi, SseService sseService) {
@@ -63,7 +63,7 @@ public class WaterConsumer extends AbstractHandler {
                 if(!valueAndTime.getTime().equals("0")) {   // 빈값 제거
                     String absValue = Math.abs(Integer.parseInt(valueAndTime.getValue())) + "";
                     log.info(entry.getKey() + " " + nameAndType[0] + " " + nameAndType[1] +  " " + absValue + " " + valueAndTime.getTime());
-                    addTSData(nameAndType[0], nameAndType[1], absValue, valueAndTime.getTime());
+                    addTSData(nameAndType[0], nameAndType[1], absValue, valueAndTime.getTime(), DataInfo.WATER_BATCH_SIZE);
                 }
             }
 

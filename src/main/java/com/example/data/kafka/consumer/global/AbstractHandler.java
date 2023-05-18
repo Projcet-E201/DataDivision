@@ -54,7 +54,7 @@ public abstract class AbstractHandler {
 		return dataMap;
 	}
 
-	protected void 	addTSData(String server, String type, String value, String time) {
+	protected void 	addTSData(String server, String type, String value, String time, int batchSize) {
 		try {
 			float fieldValue = Float.parseFloat(value);
 			String dataType = type.replaceAll("[0-9]", "");
@@ -65,10 +65,9 @@ public abstract class AbstractHandler {
 					.addTag("big_name",dataType)
 					.addField("value", fieldValue)
 					.time(Instant.now(), WritePrecision.NS);
-
 			points.add(row);
 
-			if (points.size() >= DataInfo.BATCH_SIZE) {
+			if (points.size() >= batchSize) {
 				writeApi.writePoints("week", "semse", new ArrayList<>(points));
 				points.clear();
 				log.info("Saved server for data: {}", server);

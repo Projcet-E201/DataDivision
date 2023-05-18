@@ -2,8 +2,11 @@ package com.example.data.kafka.consumer.sensor;
 
 import com.example.data.kafka.consumer.global.AbstractHandler;
 import com.example.data.sse.SseService;
+import com.example.data.util.DataInfo;
 import com.influxdb.client.WriteApi;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +19,7 @@ import java.util.Map;
  * => 1sec 당 0.9개 데이터
  * */
 @Slf4j
-//@Component
+@Component
 public class LoadConsumer extends AbstractHandler {
 
     public LoadConsumer(WriteApi writeApi, SseService sseService) {
@@ -24,8 +27,10 @@ public class LoadConsumer extends AbstractHandler {
     }
 
     @KafkaListener(topics="LOAD", groupId = "LOAD-CONSUMER-GROUP", concurrency = "3")
-    public void consumeMotor(String message) {
-        Map<String, String> receiveData = parseData(message);
-        addTSData(receiveData.get("dataServer"), receiveData.get("dataType"), receiveData.get("dataValue"), receiveData.get("dataTime"));
+    public void consumeMotor(ConsumerRecords<String, String> records) {
+        for (ConsumerRecord<String, String> record : records) {
+            Map<String, String> receiveData = parseData(record.value());
+            addTSData(receiveData.get("dataServer"), receiveData.get("dataType"), receiveData.get("dataValue"), receiveData.get("dataTime"), DataInfo.LOAD_BATCH_SIZE);
+        }
     }
 }

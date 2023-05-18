@@ -33,7 +33,7 @@ public class MotorConsumer extends AbstractHandler {
         super(writeApi, sseService);
     }
 
-    @KafkaListener(topics="MOTOR", groupId = "MOTOR-CONSUMER-GROUP", containerFactory = "containerFactory", concurrency = "3")
+    @KafkaListener(topics="MOTOR", groupId = "MOTOR-CONSUMER-GROUP", containerFactory = "containerFactory", concurrency = "8")
     public void consumeMotor(ConsumerRecords<String, String> records) {
         for (ConsumerRecord<String, String> record : records) {
             Map<String, String> receiveData = parseData(record.value());
@@ -67,7 +67,7 @@ public class MotorConsumer extends AbstractHandler {
                 if(!valueAndTime.getTime().equals("0")) {   // 빈값 제거
                     String absValue = Math.abs(Integer.parseInt(valueAndTime.getValue())) + "";
                     log.info(entry.getKey() + " " + nameAndType[0] + " " + nameAndType[1] +  " " + absValue + " " + valueAndTime.getTime());
-                    addTSData(nameAndType[0], nameAndType[1], absValue, valueAndTime.getTime());
+                    addTSData(nameAndType[0], nameAndType[1], absValue, valueAndTime.getTime(), DataInfo.MOTOR_BATCH_SIZE);
                 }
             }
 

@@ -22,20 +22,20 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * => 1sec 당 12,000개 데이터
  * */
 @Slf4j
-//@Component
+@Component
 public class AirOutKpaConsumer extends AbstractHandler {
 
     public AirOutKpaConsumer(WriteApi writeApi, SseService sseService) {
         super(writeApi, sseService);
     }
 
-    @KafkaListener(topics="AIR_OUT_KPA", groupId = "AIR_OUT_KPA-CONSUMER-GROUP", concurrency = "3")
+    @KafkaListener(topics="AIR_OUT_KPA", groupId = "AIR_OUT_KPA-CONSUMER-GROUP", concurrency = "4")
     public void consumeMotor(ConsumerRecords<String, String> records) {
         for (ConsumerRecord<String, String> record : records) {
             Map<String, String> receiveData = parseData(record.value());
 
             // Client1 + Motor1,...,10 => 키값
-            String key = receiveData.get("dataServer") + "_" + receiveData.get("dataType");
+            String key = receiveData.get("dataServer") + "-" + receiveData.get("dataType");
 
             // 큐 -> 값을 저장, 없으면 키값을 생성하고 값을 저장
             DataSet dataSet = new DataSet(receiveData.get("dataValue"), receiveData.get("dataTime"));
@@ -52,7 +52,7 @@ public class AirOutKpaConsumer extends AbstractHandler {
                 DataSet valueAndTime = new DataSet("0", "0");
 
                 // 가공
-                String[] nameAndType = entry.getKey().split("_");
+                String[] nameAndType = entry.getKey().split("-");
                 ConcurrentLinkedQueue<DataSet> motorQueue = entry.getValue();
 
                 while (!motorQueue.isEmpty()){
@@ -63,7 +63,7 @@ public class AirOutKpaConsumer extends AbstractHandler {
                 if(!valueAndTime.getTime().equals("0")) {   // 빈값 제거
                     String absValue = Math.abs(Integer.parseInt(valueAndTime.getValue())) + "";
                     log.info(entry.getKey() + " " + nameAndType[0] + " " + nameAndType[1] +  " " + absValue + " " + valueAndTime.getTime());
-                    addTSData(nameAndType[0], nameAndType[1], absValue, valueAndTime.getTime());
+                    addTSData(nameAndType[0], nameAndType[1], absValue, valueAndTime.getTime(), DataInfo.AIR_OUT_KPA_BATCH_SIZE);
                 }
             }
 

@@ -22,7 +22,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * => 1sec 당 60개 데이터
  * */
 @Slf4j
-//@Component
+@Component
 public class AirOutMpaConsumer extends AbstractHandler {
 
     public AirOutMpaConsumer(WriteApi writeApi, SseService sseService) {
@@ -63,7 +63,7 @@ public class AirOutMpaConsumer extends AbstractHandler {
                 if(!valueAndTime.getTime().equals("0")) {   // 빈값 제거
                     String absValue = Math.abs(Integer.parseInt(valueAndTime.getValue())) + "";
                     log.info(entry.getKey() + " " + nameAndType[0] + " " + nameAndType[1] +  " " + absValue + " " + valueAndTime.getTime());
-                    addTSData(nameAndType[0], nameAndType[1], absValue, valueAndTime.getTime());
+                    addTSData(nameAndType[0], nameAndType[1], absValue, valueAndTime.getTime(), DataInfo.AIR_OUT_MPA_BATCH_SIZE);
                 }
             }
 
