@@ -1,6 +1,7 @@
 package com.example.data.sse;
 
 import com.example.data.util.StateValue;
+import com.google.gson.Gson;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,21 +27,6 @@ public class SseService {
         return emitter;
     }
 
-    public void sendError(String errorMessage) {
-        sendEvent(this.errorEmitters, errorMessage);
-    }
-
-    private void sendEvent(List<SseEmitter> emitters, String message) {
-        List<SseEmitter> deadEmitters = new ArrayList<>();
-        emitters.forEach(emitter -> {
-            try {
-                emitter.send(message);
-            } catch (IOException e) {
-                deadEmitters.add(emitter);
-            }
-        });
-        emitters.removeAll(deadEmitters);
-    }
 
     public SseEmitter subscribeToInfo(@PathVariable String variable_num) {
         SseEmitter emitter = new SseEmitter();
@@ -55,7 +41,12 @@ public class SseService {
         return emitter;
     }
 
-    private void sendInfoEvent(List<SseEmitter> emitters, List<Map<String, Object>> message) {
+    public void sendError(String errorMessage) {
+        sendEvent(this.errorEmitters, errorMessage);
+    }
+
+
+    private void sendEvent(List<SseEmitter> emitters, String message) {
         List<SseEmitter> deadEmitters = new ArrayList<>();
         emitters.forEach(emitter -> {
             try {
@@ -66,18 +57,31 @@ public class SseService {
         });
         emitters.removeAll(deadEmitters);
     }
-//    @Scheduled(fixedRate = 10000)
-//    public void sendDataUpdates() {
-//        for (Map.Entry<String, List<SseEmitter>> entry : infoEmitters.entrySet()) {
-//            String variable_num = entry.getKey();
-//            System.out.println("####################################################variable_num = " + variable_num);
-//            List<SseEmitter> emitters = entry.getValue();
-//
-//            List<Map<String, Object>> data = generateData(variable_num); // 데이터를 생성하는 로직
-//
-//            sendInfoEvent(emitters, data);
-//        }
-//    }
+    private void sendInfoEvent(List<SseEmitter> emitters, List<Map<String, Object>> message) {
+        List<SseEmitter> deadEmitters = new ArrayList<>();
+        emitters.forEach(emitter -> {
+            try {
+                Gson gson = new Gson();
+                String result = gson.toJson(message);
+                emitter.send(result);
+            } catch (IOException e) {
+                deadEmitters.add(emitter);
+            }
+        });
+        emitters.removeAll(deadEmitters);
+    }
+    @Scheduled(fixedRate = 10000)
+    public void sendDataUpdates() {
+        for (Map.Entry<String, List<SseEmitter>> entry : infoEmitters.entrySet()) {
+            String variable_num = entry.getKey();
+            System.out.println("####################################################variable_num = " + variable_num);
+            List<SseEmitter> emitters = entry.getValue();
+
+            List<Map<String, Object>> data = generateData(variable_num); // 데이터를 생성하는 로직
+
+            sendInfoEvent(emitters, data);
+        }
+    }
 
     private List<Map<String, Object>> generateData(String client_num) {
         String client = "CLIENT" + client_num;
@@ -113,5 +117,4 @@ public class SseService {
         }
         return recordsList;
     }
-
 }

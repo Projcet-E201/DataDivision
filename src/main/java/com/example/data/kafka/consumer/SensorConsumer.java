@@ -2,7 +2,6 @@ package com.example.data.kafka.consumer;
 
 import com.example.data.kafka.data.SensorHandler;
 import com.example.data.sse.SseService;
-import com.influxdb.client.InfluxDBClient;
 import com.influxdb.client.WriteApi;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
