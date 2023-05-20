@@ -2,18 +2,25 @@ package com.example.data.util;
 
 import java.util.concurrent.TimeUnit;
 
+/**
+ * 가공주기당 (11 * 센서개수) 만큼 저장
+ * 가공주기를 늘리는 것은 저장주기를 늘리는 것
+ * */
+
 public class DataInfo {
 
-	private static final int DUPLICATE = 20;
+	private static final int DUPLICATE = 10;
 	private static final int CLIENT_COUNT = 11;
 
 	// Motor 정보
+	// 가공주기당 12*10개 저장
 	public static final int MOTOR_COUNT = 10;
 	public static final int MOTOR_BATCH_SIZE = CLIENT_COUNT * MOTOR_COUNT;
 	public static final int MOTOR_CALCULATE_TIME = DUPLICATE * 5;
 	public static final TimeUnit MOTOR_CALCULATE_TIME_UNIT = TimeUnit.SECONDS;
 
 	// Vacuum 정보
+	// 가공주기당 12*30개 저장
 	public static final int VACUUM_COUNT = 30;
 	public static final int VACUUM_BATCH_SIZE = CLIENT_COUNT * VACUUM_COUNT;
 	public static final int VACUUM_CALCULATE_TIME = DUPLICATE * 10;
