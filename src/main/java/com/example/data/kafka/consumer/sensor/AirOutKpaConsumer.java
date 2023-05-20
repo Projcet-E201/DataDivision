@@ -29,7 +29,7 @@ public class AirOutKpaConsumer extends AbstractHandler {
         super(writeApi, sseService);
     }
 
-    @KafkaListener(topics="AIR_OUT_KPA", groupId = "AIR_OUT_KPA-CONSUMER-GROUP", concurrency = "4")
+    @KafkaListener(topics="AIR_OUT_KPA", groupId = "AIR_OUT_KPA-CG", concurrency = "4")
     public void consumeMotor(ConsumerRecords<String, String> records) {
         for (ConsumerRecord<String, String> record : records) {
             Map<String, String> receiveData = parseData(record.value());

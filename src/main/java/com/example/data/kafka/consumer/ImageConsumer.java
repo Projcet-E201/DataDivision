@@ -29,7 +29,7 @@ public class ImageConsumer extends AbstractHandler {
         super(writeApi, sseService);
     }
 
-    @KafkaListener(topics="IMAGE", groupId = "IMAGE-CONSUMER-GROUP")
+    @KafkaListener(topics="IMAGE", groupId = "IMAGE-CG")
     public void consumeImage(String message) throws Exception {
         Map<String, String> receiveData = parseData(message);
 

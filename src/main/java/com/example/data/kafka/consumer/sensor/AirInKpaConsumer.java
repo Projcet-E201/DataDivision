@@ -26,7 +26,7 @@ public class AirInKpaConsumer extends AbstractHandler {
         super(writeApi, sseService);
     }
 
-    @KafkaListener(topics="AIR_IN_KPA", groupId = "AIR_IN_KPA-CONSUMER-GROUP", concurrency = "3")
+    @KafkaListener(topics="AIR_IN_KPA", groupId = "AIR_IN_KPA-CG", concurrency = "3")
     public void consumeMotor(ConsumerRecords<String, String> records) {
         for (ConsumerRecord<String, String> record : records) {
             Map<String, String> receiveData = parseData(record.value());
