@@ -29,7 +29,7 @@ public class AirOutMpaConsumer extends AbstractHandler {
         super(writeApi, sseService);
     }
 
-    @KafkaListener(topics="AIR_OUT_MPA", groupId = "AIR_OUT_MPA-CONSUMER-GROUP", concurrency = "3")
+    @KafkaListener(topics="AIR_OUT_MPA", groupId = "AIR_OUT_MPA-CONSUMER-GROUP", containerFactory = "containerFactory", concurrency = "3")
     public void consumeMotor(ConsumerRecords<String, String> records) {
         for (ConsumerRecord<String, String> record : records) {
             Map<String, String> receiveData = parseData(record.value());
@@ -61,12 +61,11 @@ public class AirOutMpaConsumer extends AbstractHandler {
 
                 // 저장
                 if(!valueAndTime.getTime().equals("0")) {   // 빈값 제거
-                    String absValue = Math.abs(Integer.parseInt(valueAndTime.getValue())) + "";
-                    log.info(entry.getKey() + " " + nameAndType[0] + " " + nameAndType[1] +  " " + absValue + " " + valueAndTime.getTime());
-                    addTSData(nameAndType[0], nameAndType[1], absValue, valueAndTime.getTime(), DataInfo.AIR_OUT_MPA_BATCH_SIZE);
+                    log.info(entry.getKey() + " " + nameAndType[0] + " " + nameAndType[1] +  " " + valueAndTime.getValue() + " " + valueAndTime.getTime());
+                    addTSData(nameAndType[0], nameAndType[1], valueAndTime.getValue(), valueAndTime.getTime(), DataInfo.AIR_OUT_MPA_BATCH_SIZE);
                 }
             }
 
-        }, DataInfo.AIR_OUT_MPA_CALCULATE_TIME, DataInfo.AIR_OUT_MPA_CALCULATE_TIME, DataInfo.AIR_OUT_MPA_CALCULATE_TIME_UNIT);
+        }, 0, DataInfo.AIR_OUT_MPA_CALCULATE_TIME, DataInfo.AIR_OUT_MPA_CALCULATE_TIME_UNIT);
     }
 }

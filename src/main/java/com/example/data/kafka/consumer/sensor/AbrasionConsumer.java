@@ -27,7 +27,7 @@ public class AbrasionConsumer extends AbstractHandler {
         super(writeApi, sseService);
     }
 
-    @KafkaListener(topics="ABRASION", groupId = "ABRASION-CONSUMER-GROUP", concurrency = "3")
+    @KafkaListener(topics="ABRASION", groupId = "ABRASION-CONSUMER-GROUP", containerFactory = "containerFactory", concurrency = "3")
     public void consumeMotor(ConsumerRecords<String, String> records) {
         for (ConsumerRecord<String, String> record : records) {
             Map<String, String> receiveData = parseData(record.value());

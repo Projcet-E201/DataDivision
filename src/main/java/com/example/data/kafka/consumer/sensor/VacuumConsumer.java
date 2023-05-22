@@ -29,7 +29,7 @@ public class VacuumConsumer extends AbstractHandler {
         super(writeApi, sseService);
     }
 
-    @KafkaListener(topics="VACUUM", groupId = "VACUUM-CONSUMER-GROUP", concurrency = "8")
+    @KafkaListener(topics="VACUUM", groupId = "VACUUM-CONSUMER-GROUP", containerFactory = "containerFactory", concurrency = "8")
     public void consumeMotor(ConsumerRecords<String, String> records) {
         for (ConsumerRecord<String, String> record : records) {
             Map<String, String> receiveData = parseData(record.value());

@@ -29,7 +29,7 @@ public class WaterConsumer extends AbstractHandler {
         super(writeApi, sseService);
     }
 
-    @KafkaListener(topics="WATER", groupId = "WATER-CONSUMER-GROUP", concurrency = "3")
+    @KafkaListener(topics="WATER", groupId = "WATER-CONSUMER-GROUP", containerFactory = "containerFactory", concurrency = "3")
     public void consumeMotor(ConsumerRecords<String, String> records) {
         for (ConsumerRecord<String, String> record : records) {
             Map<String, String> receiveData = parseData(record.value());
@@ -61,9 +61,8 @@ public class WaterConsumer extends AbstractHandler {
 
                 // 저장
                 if(!valueAndTime.getTime().equals("0")) {   // 빈값 제거
-                    String absValue = Math.abs(Integer.parseInt(valueAndTime.getValue())) + "";
-                    log.info(entry.getKey() + " " + nameAndType[0] + " " + nameAndType[1] +  " " + absValue + " " + valueAndTime.getTime());
-                    addTSData(nameAndType[0], nameAndType[1], absValue, valueAndTime.getTime(), DataInfo.WATER_BATCH_SIZE);
+                    log.info(entry.getKey() + " " + nameAndType[0] + " " + nameAndType[1] +  " " + valueAndTime.getValue() + " " + valueAndTime.getTime());
+                    addTSData(nameAndType[0], nameAndType[1], valueAndTime.getValue(), valueAndTime.getTime(), DataInfo.WATER_BATCH_SIZE);
                 }
             }
 

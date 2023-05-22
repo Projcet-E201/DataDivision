@@ -26,7 +26,7 @@ public class LoadConsumer extends AbstractHandler {
         super(writeApi, sseService);
     }
 
-    @KafkaListener(topics="LOAD", groupId = "LOAD-CONSUMER-GROUP", concurrency = "3")
+    @KafkaListener(topics="LOAD", groupId = "LOAD-CONSUMER-GROUP", containerFactory = "containerFactory", concurrency = "3")
     public void consumeMotor(ConsumerRecords<String, String> records) {
         for (ConsumerRecord<String, String> record : records) {
             Map<String, String> receiveData = parseData(record.value());
