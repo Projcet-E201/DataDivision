@@ -59,7 +59,6 @@ public class MotorConsumer extends AbstractHandler {
                 String[] nameAndType = entry.getKey().split("_");
                 ConcurrentLinkedQueue<DataSet> motorQueue = entry.getValue();
 
-                log.info("MOTOR 왔당");
                 while (!motorQueue.isEmpty()){
                     valueAndTime = motorQueue.poll();
                 }
