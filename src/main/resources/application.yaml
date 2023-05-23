@@ -21,7 +21,7 @@ spring:
       max-request-size: 5MB
 
   kafka:
-    bootstrap-servers: plaintext://3.35.225.215:9092,plaintext://43.200.129.201:9092,plaintext://15.164.209.217:9092,plaintext://3.34.43.153:9092,plaintext://52.78.98.144:9092
+    bootstrap-servers: plaintext://3.38.146.28:9092,plaintext://3.36.12.95:9092,plaintext://43.201.44.180:9092,plaintext://3.34.43.153:9092,plaintext://52.78.98.144:9092
     consumer:
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
