@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit;
 
 public class DataInfo {
 
-	private static final int BATCH_FLAG = 0;
+	private static final int BATCH_FLAG = 2;
 	private static final int DUPLICATE = 5;
 	private static final int CLIENT_COUNT = 11;
 
